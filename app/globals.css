@@ -1,4 +1,4 @@
-@tailwind base;
+  @tailwind base;
   @tailwind components;
   @tailwind utilities;
 
@@ -59,3 +59,52 @@
       @apply bg-background text-foreground;
     }
   }
+
+  .slider{
+    height: 250px;
+    margin:auto;
+    position: relative;
+    width: 90%;
+    display: grid;
+    place-items: center;
+  }
+
+  .slide-track{
+    display: flex;
+    width: calc(250px * 18);
+  }
+
+  @keyframes scroll {
+    0%{
+      transform: translateX(0);
+    }
+    100%{
+      transform: translateX(calc(-250px*9));
+    }
+  }
+
+  .slide{
+    height: 200px;
+    width: 250px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+  }
+
+  .photo{
+    width: 100%;
+  }
+
+
+  /* Snapping */
+
+  .scroll-container {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100vh; /* Pastikan container memiliki tinggi penuh */
+  }
+  
+  .scroll-element {
+    scroll-snap-align: start;
+  }
+  

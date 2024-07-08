@@ -1,0 +1,25 @@
+1. Cover
+Nickname pengantin pria
+Nickname pengantin Wanita
+*opt: 2 buah foto
+
+2. Introduction
+Hari Tanggal
+Header Eanggage
+Content Engage
+*opt: 2 buah foto
+
+3. Greeting 
+- Foto Pengantin Putri
+- Nama lengkap pengantin putri
+- Putri dari
+- Instagram putri
+- Foto Pengantin Pria
+- Nama lengkap penganti pria
+- Putra dari
+- Instagram putra
+
+
+4. CountingDate
+*auto counting 
+ 
