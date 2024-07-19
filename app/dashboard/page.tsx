@@ -1,6 +1,7 @@
 import { AccordionInfo } from '@/components/dashboard/AccordionInfo'
 import { DataTableDemo } from '@/components/dashboard/DataTable'
 import { WordInvitation } from '@/components/dashboard/WordInvitation'
+import Example from '@/components/landingpage/FloatingPhone'
 import React from 'react'
 
 function page() {
@@ -18,7 +19,7 @@ function page() {
             <hr className="my-4"/>
             <WordInvitation />
         </div>
-      
+{/* <Example/>       */}
     </div>
   )
 }

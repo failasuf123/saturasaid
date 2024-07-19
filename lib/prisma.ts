@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 const prismaClientSingleton = () => {
   return new PrismaClient();
@@ -12,6 +12,15 @@ const globalForPrisma = globalThis as unknown as {
 
 const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
 
-export default prisma;
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+(async () => {
+  try {
+    await prisma.$connect();
+    console.log("Connected to the database.");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
+})();
+
+export default prisma;

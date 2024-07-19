@@ -14,27 +14,44 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-model Form{
-  id          Int      @id @default(autoincrement())
-  userId      String
-  createdAt   DateTime @default(now())
-  published   Boolean  @default(false)
-  name        String
-  description String   @default("")
-  content     String   @default("[]")
 
-  visits      Int      @default(0)
-  submissions Int      @default(0)
 
-  ShareURL    String   @default(uuid())
-  FormSubmissions      FormSubmissions[]
+model Wedding {
+  id              Int         @id @default(autoincrement())
+  createdAt       DateTime    @default(now())
+  watermark       Boolean     @default(false)
+  theme           String
+
+  nicknameMale    String
+  nicknameFemale  String
+  fullnameMale    String
+  fullnameFemale  String
+  dadMale         String
+  momMale         String
+  dadFemale       String
+  momFemale       String
+
+  mainEventTime   DateTime
+
+  introductionType Int
+  greetingType    Int
+  hookMiddleType  Int
+  storyType       Int
+  closingType     Int
+  songType        Int
+
+  invitations     Invitation[]
 }
 
-model FormSubmissions{
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  formId    Int
-  form      Form     @relation(fields: [formId], references: [id])
+model Invitation {
+  inviteId  Int      @id @default(autoincrement())
+  name      String
+  url       String
+  check     Boolean     @default(false)
 
-  content   String
+  weddingId Int   // Merujuk ke bidang id di model Wedding
+
+  wedding   Wedding  @relation(fields: [weddingId], references: [id])
 }
+
+
