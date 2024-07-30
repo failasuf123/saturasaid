@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,44 +8,79 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-
+model User {
+  id              Int      @id @default(autoincrement())
+  clerkid         String?  @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  weddings  Wedding[]
+}
 
 model Wedding {
-  id              Int         @id @default(autoincrement())
-  createdAt       DateTime    @default(now())
-  watermark       Boolean     @default(false)
-  theme           String
+  id                String         @id 
+  createdAt         DateTime    @default(now())
+  watermark         Boolean     @default(false)
+  theme             String
 
-  nicknameMale    String
-  nicknameFemale  String
-  fullnameMale    String
-  fullnameFemale  String
-  dadMale         String
-  momMale         String
-  dadFemale       String
-  momFemale       String
+  nicknameMale      String
+  nicknameFemale    String
+  fullnameMale      String
+  fullnameFemale    String
+  dadMale           String
+  momMale           String
+  dadFemale         String
+  momFemale         String
 
-  mainEventTime   DateTime
+  mainEventTime     DateTime
 
-  introductionType Int
-  greetingType    Int
-  hookMiddleType  Int
-  storyType       Int
-  closingType     Int
-  songType        Int
+  accountName1      String?
+  accountBank1      String?
+  accountNumber1    String?
+  accountName2      String?
+  accountBank2      String?
+  accountNumber2    String?
 
-  invitations     Invitation[]
+  event1            String
+  address1          String
+  gmap1             String
+  time1             DateTime
+  event2            String?
+  address2          String?
+  gmap2             String?
+  time2             DateTime?
+
+  introductionType  Int
+  greetingType      Int
+  hookMiddleType    Int
+  storyType         Int
+  closingType       Int
+  songType          Int
+
+  invitations       Invitation[]
+  images            Image[]
+  userId            String
+  user              User @relation(fields: [userId], references: [clerkid])
+}
+
+model Image {
+  id         Int      @id @default(autoincrement())
+  url        String
+  type       String
+  createdAt  DateTime    @default(now())
+  weddingId  String
+  wedding    Wedding  @relation(fields: [weddingId], references: [id], onDelete: Cascade)
 }
 
 model Invitation {
-  inviteId  Int      @id @default(autoincrement())
-  name      String
-  url       String
-  check     Boolean     @default(false)
+  inviteId   Int      @id @default(autoincrement())
+  number     Int      @default(autoincrement())
+  name       String
+  url        String
+  whatsapp   String
+  email      String
+  check      Boolean  @default(false)
 
-  weddingId Int   // Merujuk ke bidang id di model Wedding
-
-  wedding   Wedding  @relation(fields: [weddingId], references: [id])
+  weddingId  String
+  wedding    Wedding  @relation(fields: [weddingId], references: [id])
 }
-
-

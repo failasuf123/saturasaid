@@ -25,9 +25,13 @@ import {
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import prisma from '@/lib/prisma'
 
-// Define the schema for the form
+import { UploadButton } from "@/app/utils/uploadthing";
+import Image from "next/image";
+
+import { useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
+
 const formSchema = z.object({
   // Card 1
   nicknameMale: z.string(),
@@ -39,6 +43,24 @@ const formSchema = z.object({
   dadFemale: z.string(),
   momFemale: z.string(),
   mainEventTime: z.date(),
+
+  accountName1: z.string(),
+  accountBank1: z.string(),
+  accountNumber1: z.string(),
+
+  accountName2: z.string(),
+  accountBank2: z.string(),
+  accountNumber2: z.string(),
+
+  event1: z.string(),
+  address1: z.string(),
+  gmap1: z.string(),
+  time1: z.date(),
+  
+  event2: z.string(),
+  address2: z.string(),
+  gmap2: z.string(),
+  time2: z.date(),
 
   // Card 2
   introductionType: z.number(),
@@ -52,9 +74,19 @@ const formSchema = z.object({
 
   // default
   theme: z.string(),
+  userId: z.string()
 });
 
+const imageSchema = z.object({
+    url: z.string(),
+    type: z.string(),
+    weddingId: z.number() || null,
+});
+
+
+
 type FormSchema = z.infer<typeof formSchema>;
+type ImageSchema = z.infer<typeof imageSchema>;
 
 const initialFormValues: FormSchema = {
   nicknameMale: "",
@@ -67,6 +99,24 @@ const initialFormValues: FormSchema = {
   momFemale: "",
   mainEventTime: new Date(),
 
+  accountName1: "",
+  accountBank1: "",
+  accountNumber1: "",
+
+  accountName2: "",
+  accountBank2: "",
+  accountNumber2: "",
+
+  event1: "",
+  address1: "",
+  gmap1: "",
+  time1: new Date(),
+  
+  event2: "",
+  address2: "",
+  gmap2: "",
+  time2: new Date(),
+
   introductionType: 1,
   greetingType: 1,
   hookMiddleType: 1,
@@ -76,6 +126,14 @@ const initialFormValues: FormSchema = {
   songType: 1,
 
   theme:"",
+
+  userId: "",
+};
+
+const initialImageValues: ImageSchema = {
+  url: "",
+  type: "",
+  weddingId:-1,
 };
 
 
@@ -87,6 +145,8 @@ const saveWeddingClient = async (formData: FormData) => {
   const convertedData = {
     ...data,
     mainEventTime: new Date(data.mainEventTime as string),
+    time1: new Date(data.time1 as string),
+    time2: new Date(data.time2 as string),
     introductionType: parseInt(data.introductionType as string, 10),
     greetingType: parseInt(data.greetingType as string, 10),
     hookMiddleType: parseInt(data.hookMiddleType as string, 10),
@@ -133,9 +193,14 @@ const saveWeddingClient = async (formData: FormData) => {
 
 
 
+
+
 function DrawerTools() {
   const [formValues, setFormValues] = useState<FormSchema>(initialFormValues);
+  const [imageValues, setImageValues] = useState<ImageSchema>(initialImageValues);
   const [date, setDate] = useState<Date | undefined>(formValues.mainEventTime);
+  const [time1, setTime1] = useState<Date | undefined>(formValues.time1)
+  const [time2, setTime2] = useState<Date | undefined>(formValues.time2)
 
   const [page, setPage] = useState(0);
   const [page1, setPage1] = useState(0);
@@ -148,6 +213,8 @@ function DrawerTools() {
   const [selectedStoryIndex, setSelectedStoryIndex] = useState<number | null>(null);
   const [selectedClosingIndex, setSelectedClosingIndex] = useState<number | null>(null);
   const [selectedSongIndex, setSelectedSongIndex] = useState<number | null>(null);
+  const { isLoaded, user } = useUser();
+  const clerkUserId = user?.id ?? '';
   
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -156,7 +223,10 @@ function DrawerTools() {
 
   useEffect(() => {
     setValue('mainEventTime', date || new Date());
-  }, [date, setValue]);
+    setValue('userId', clerkUserId)
+    setValue('time1', time1 || new Date())
+    setValue('time2', time2 || new Date())
+  }, [date, setValue, time1 , time2, isLoaded]);
 
   const onSubmit: SubmitHandler<FormSchema> = data => {
     setFormValues(data);
@@ -236,10 +306,140 @@ function DrawerTools() {
               {errors.mainEventTime && <span className="text-red-500 text-xs">{errors.mainEventTime.message}</span>}
             </div>
           </>
+          
         );
+        case 3:
+          return(
+            <>
+            <h2>Acara 1</h2>
+            <ScrollArea className="w-[480px] h-full rounded-md border">
+              <div className="flex flex-wrap w-max space-x-4 p-4 h-full gap-4">
+                <div className="w-[330px]">
+                  <div className="mb-4 flex flex-col gap-2">
+                    <label htmlFor="event1" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Nama Event</label>
+                    <input {...register('event1')} className="px-2 w-full py-2 rounded-md border text-sm border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                    {errors.event1 && <span className="text-red-500 text-xs">{errors.event1.message}</span>}
+                  </div>
+                  <div className="mb-4 flex flex-col gap-2">
+                    <label htmlFor="address1" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Alamat</label>
+                    <input {...register('address1')} className="px-2 w-full py-2 rounded-md border text-sm border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                    {errors.address1 && <span className="text-red-500 text-xs">{errors.address1.message}</span>}
+                  </div>
+                  <div className="mb-4 flex flex-col gap-2">
+                    <label htmlFor="gmap1" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Link Gmap</label>
+                    <input {...register('gmap1')} className="px-2 w-full py-2 rounded-md border text-sm border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                    {errors.gmap1 && <span className="text-red-500 text-xs">{errors.gmap1.message}</span>}
+                  </div>
+
+                </div>
+
+                <div className="mb-4 flex flex-col gap-2">
+                <label htmlFor="time1" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Waktu Kegiatan</label>
+
+                  <Calendar mode="single" selected={time1} onSelect={setTime1} className="rounded-md border shadow" />
+                  {errors.time1 && <span className="text-red-500 text-xs">{errors.time1.message}</span>}
+                </div>
+              <ScrollBar orientation="horizontal" />
+              </div>
+            </ScrollArea>
+          </>
+
+          );
+          case 4:
+
+            return(
+              <>
+                <h2>Acara 2</h2>
+                <ScrollArea className="w-[480px] h-full rounded-md border">
+                  <div className="flex flex-wrap w-max space-x-4 p-4 h-full gap-4">
+                    <div className="w-[330px]">
+                      <div className="mb-4 flex flex-col gap-2">
+                        <label htmlFor="event2" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Nama Event</label>
+                        <input {...register('event2')} className="px-2 w-full py-2 rounded-md border text-sm border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                        {errors.event2 && <span className="text-red-500 text-xs">{errors.event2.message}</span>}
+                      </div>
+                      <div className="mb-4 flex flex-col gap-2">
+                        <label htmlFor="address2" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Alamat</label>
+                        <input {...register('address2')} className="px-2 w-full py-2 rounded-md border text-sm border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                        {errors.address2 && <span className="text-red-500 text-xs">{errors.address2.message}</span>}
+                      </div>
+                      <div className="mb-4 flex flex-col gap-2">
+                        <label htmlFor="gmap2" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Link Gmap</label>
+                        <input {...register('gmap2')} className="px-2 w-full py-2 rounded-md border text-sm border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                        {errors.gmap2 && <span className="text-red-500 text-xs">{errors.gmap2.message}</span>}
+                      </div>
+    
+                    </div>
+    
+                    <div className="mb-4 flex flex-col gap-2">
+                    <label htmlFor="time2" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Waktu Kegiatan</label>
+    
+                      <Calendar mode="single" selected={time2} onSelect={setTime2} className="rounded-md border shadow" />
+                      {errors.time2 && <span className="text-red-500 text-xs">{errors.time2.message}</span>}
+                    </div>
+                  <ScrollBar orientation="horizontal" />
+                  </div>
+                </ScrollArea>
+              </>
+            );
+          case 5: 
+          return(
+            <>
+              <h2 className="text-lg font-bold text-gray-800 text-center">Lorem ipsum dolor sit am</h2>
+              <p className="text-xs text-center text-gray-500 dark:text-gray-200">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error maxime sapiente cum ullam nam sequi, pariatur, repudiandae eum illum deleniti dolorem saepe.</p>
+              <ScrollArea>
+
+              <div className="flex flex-wrap w-max space-x-4 p-4 h-full gap-4">
+                <div className="w-[300px]">
+                  <div className="mb-4 flex flex-col gap-2">
+                    <label htmlFor="placeEvent" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Atas Nama Rekening 1</label>
+                    <input {...register('accountName1')} className="px-2 w-full py-2 rounded-md border text-sm border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                    {errors.accountName1 && <span className="text-red-500 text-xs">{errors.accountName1.message}</span>}
+                  </div>
+                  <div className="mb-4 flex flex-col gap-2">
+                    <label htmlFor="accountBank1" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Bank 1</label>
+                    <input {...register('accountBank1')} className="px-2 w-full py-2 rounded-md border text-sm border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                    {errors.accountBank1 && <span className="text-red-500 text-xs">{errors.accountBank1.message}</span>}
+                  </div>
+                  <div className="mb-4 flex flex-col gap-2">
+                    <label htmlFor="gmap" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Nomor Rekening 1</label>
+                    <input {...register('accountNumber1')} className="px-2 w-full py-2 rounded-md border text-sm border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                    {errors.accountNumber1 && <span className="text-red-500 text-xs">{errors.accountNumber1.message}</span>}
+                  </div>
+
+                </div>
+
+                <div className="w-[300px]">
+                  <div className="mb-4 flex flex-col gap-2">
+                    <label htmlFor="accountName2" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Atas Nama Rekening 2</label>
+                    <input {...register('accountName2')} className="px-2 w-full py-2 rounded-md border text-sm border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                    {errors.accountName2 && <span className="text-red-500 text-xs">{errors.accountName2.message}</span>}
+                  </div>
+                  <div className="mb-4 flex flex-col gap-2">
+                    <label htmlFor="accountBank2" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Bank 2</label>
+                    <input {...register('accountBank2')} className="px-2 w-full py-2 rounded-md border text-sm border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                    {errors.accountBank2 && <span className="text-red-500 text-xs">{errors.accountBank2.message}</span>}
+                  </div>
+                  <div className="mb-4 flex flex-col gap-2">
+                    <label htmlFor="accountNumber2" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Nomor Rekening 2</label>
+                    <input {...register('accountNumber2')} className="px-2 w-full py-2 rounded-md border text-sm border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+                    {errors.accountNumber2 && <span className="text-red-500 text-xs">{errors.accountNumber2.message}</span>}
+                  </div>
+
+                </div>
+
+
+              </div>
+              <ScrollBar orientation="horizontal" />
+
+              </ScrollArea>
+
+            </>
+          )
       default:
         return null;
     }
+
   };
 
 
@@ -264,50 +464,49 @@ function DrawerTools() {
         case 1:
             return (
                 <>
-                    <div className="mb-4 flex flex-col gap-2 justify-between items-center h-2/3">
-                      <div>
-
-                        <label htmlFor="template_introductionType" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Pilih Pembukaan undangan</label>
-                      </div>
-                        <div className="grid gap-4 mt-5">
-                            <ScrollArea className="w-[480px] h-full rounded-md border">
-                                <div className="flex flex-wrap w-max space-x-4 p-4 h-full">
-                                    {IntroductionList.map((intro, index) => (
-                                        <div
-                                            key={index}
-                                            onClick={() => {
-                                              setValue('introductionType', intro.type);
-                                              setSelectedIntroductionIndex(index);
-                                          }}                                         
-                                          className={`h-72 w-96 p-4 border rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 ${selectedIntroductionIndex === index ? 'bg-gray-800 ' : ''}`}     
-                                            >
-                                            <div className="font-bold text-center">{index + 1}.Tema {intro.banner}</div>
-                                            <div className="italic text-center my-2">{intro.isi}</div>
-                                            <div className="text-sm text-gray-500 text-center">{intro.sumber}</div>
-                                        </div>
-                                    ))}
-                                </div>
-                                <ScrollBar orientation="horizontal" />
-                            </ScrollArea>
-                        </div>
-                        {errors.introductionType && <span className="text-red-500 text-xs">{errors.introductionType.message}</span>}
+                  <div className="mb-4 flex flex-col gap-2 justify-between items-center h-2/3">
+                    <div>
+                      <label htmlFor="template_introductionType" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Pilih Pembukaan undangan</label>
                     </div>
+                      <div className="grid gap-4 mt-5">
+                          <ScrollArea className="w-[480px] h-full rounded-md border">
+                              <div className="flex flex-wrap w-max space-x-4 p-4 h-full">
+                                  {IntroductionList.map((intro, index) => (
+                                      <div
+                                          key={index}
+                                          onClick={() => {
+                                            setValue('introductionType', intro.type);
+                                            setSelectedIntroductionIndex(index);
+                                        }}                                         
+                                        className={`h-72 w-96 p-4 border rounded-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 ${selectedIntroductionIndex === index ? 'bg-gray-800 ' : ''}`}     
+                                          >
+                                          <div className="font-bold text-center">{index + 1}.Tema {intro.banner}</div>
+                                          <div className="italic text-center my-2">{intro.isi}</div>
+                                          <div className="text-sm text-gray-500 text-center">{intro.sumber}</div>
+                                      </div>
+                                  ))}
+                              </div>
+                              <ScrollBar orientation="horizontal" />
+                          </ScrollArea>
+                      </div>
+                      {errors.introductionType && <span className="text-red-500 text-xs">{errors.introductionType.message}</span>}
+                  </div>
                 </>
             );
         case 2:
             return (
                 <>
-                    <div className="mb-4 flex flex-col gap-2 py-3 px-5 justify-between items-center h-2/3">
-                        <div className="font-bold text-lg">
-                            2. Salam
-                        </div>
-                        <div>
-                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error aut, quae dolor quo iusto pariatur. 
-                                Doloribus nostrum est dolor? Excepturi illo corporis asperiores. Qui dolorem est error, suscipit odit
-                                commodi exercitationem impedit tempora?
-                            </p>
-                        </div>
-                    </div>
+                  <div className="mb-4 flex flex-col gap-2 py-3 px-5 justify-between items-center h-2/3">
+                      <div className="font-bold text-lg">
+                          2. Salam
+                      </div>
+                      <div>
+                          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Error aut, quae dolor quo iusto pariatur. 
+                              Doloribus nostrum est dolor? Excepturi illo corporis asperiores. Qui dolorem est error, suscipit odit
+                              commodi exercitationem impedit tempora?
+                          </p>
+                      </div>
+                  </div>
                 </>
             );
         case 3:
@@ -615,8 +814,8 @@ function DrawerTools() {
               {renderSectionBridalData()}
               <div className="flex justify-between mt-4">
                 {page > 0 && <button type="button" onClick={() => setPage(page - 1)} className="bg-gray-500 text-white px-4 py-2 rounded">Kembali</button>}
-                {page < 2 && <button type="button" onClick={() => setPage(page + 1)} className="bg-blue-500 text-white px-4 py-2 rounded">Selanjutnya</button>}
-                {page === 2 && <button type="button" className="bg-green-500 text-white px-4 py-2 rounded">Selesai</button>}
+                {page < 5 && <button type="button" onClick={() => setPage(page + 1)} className="bg-blue-500 text-white px-4 py-2 rounded">Selanjutnya</button>}
+                {page === 5 && <button type="button" className="bg-green-500 text-white px-4 py-2 rounded">Selesai</button>}
               </div>
           </DialogContent>
         </Dialog>

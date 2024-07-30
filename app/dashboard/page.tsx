@@ -1,8 +1,8 @@
 import { AccordionInfo } from '@/components/dashboard/AccordionInfo'
-import { DataTableDemo } from '@/components/dashboard/DataTable'
+import { DataTableDemo } from '@/app/dashboard/components/DataTable'
 import { WordInvitation } from '@/components/dashboard/WordInvitation'
-import Example from '@/components/landingpage/FloatingPhone'
 import React from 'react'
+
 
 function page() {
   return (
