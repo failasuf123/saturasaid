@@ -2,9 +2,8 @@ import { BridalCouple } from "@/typings";
 
 export const BridalCoupleList: BridalCouple[] = [
     {
-        id: 1,
+        id: "1",
         theme: "FlowerGarden",
-        link: "romeo-juliate",
 
         nicknameMale: "Romeo",
         nicknameFemale: "Juliate",
@@ -16,22 +15,26 @@ export const BridalCoupleList: BridalCouple[] = [
         dadFemale: "Supardi Joko Handoyo",
         momFemale: "Husna Mobarok",
 
-        mainEventTime: "2024-08-10T14:00:00",
 
         introductionType: 1,
         greetingType: 2,
-        hookMiddle: 1,
+        hookMiddleType: 1,
         storyType: 2,
         closingType: 1,
         songType: 1,
 
-        place: [
-            {
-                event: "Resepsi",
-                time: "2024-08-10T14:00:00",
-                gmap: "https://maps.google.com/maps?q=Ajibarang%20wetan%20Rt%2002%20Rw%2012&t=&z=13&ie=UTF8&iwloc",
-            }
-        ],
+
+        event: "Akad Nikah",
+        time: new Date("2024-08-10T14:00:00"),
+        gmap: "https://maps.google.com/maps?q=Ajibarang%20wetan%20Rt%2002%20Rw%2012&t=&z=13&ie=UTF8&iwloc",
+        address: "Jalan Agus Salim No 7 Kopo, Bandung",
+
+        event2: "Resepsi",
+        time2: new Date("2024-08-10T14:00:00"),
+        gmap2: "https://maps.google.com/maps?q=Ajibarang%20wetan%20Rt%2002%20Rw%2012&t=&z=13&ie=UTF8&iwloc",
+        address2: "Jaln Untung Suprapto No 8 Ciwidey",
+        isEvent2: true,
+
 
         photo: [
             { url: "/pasangan/1/1.jpeg", type: "cover" },
@@ -44,119 +47,15 @@ export const BridalCoupleList: BridalCouple[] = [
             { url: "/pasangan/1/8.jpeg", type: "female" },
         ],
 
-        gift: [
-            {
-                accountName: "Romeo",
-                bank: "BNI",
-                accountNumber: "67890"
-            },
-            {
-                accountName: "Juliate",
-                bank: "BSI",
-                accountNumber: "127490"
-            }
-        ]
+
+        accountName1: "BNI",
+        accountBank1: "Romeo",
+        accountNumber1: "67890",
+
+        accountName2: "BSI",
+        accountBank2: "Juliate",
+        accountNumber2: "127490",
+        userId: ""
     },
-    {
-        id: 2,
-        theme: "ocean",
-        link: "jack-rose",
-
-        nicknameMale: "Jack",
-        nicknameFemale: "Rose",
-        fullnameMale: "Jack Dawson",
-        fullnameFemale: "Rose DeWitt Bukater",
-
-        dadMale: "Joseph Dawson",
-        momMale: "Elizabeth Dawson",
-        dadFemale: "Edward DeWitt",
-        momFemale: "Ruth DeWitt Bukater",
-
-        mainEventTime: "2024-09-15T10:00:00",
-
-        introductionType: 1,
-        greetingType: 1,
-        hookMiddle: 1,
-        storyType: 2,
-        closingType: 1,
-        songType: 2,
-
-        place:[
-            {
-                event: "Resepsi",
-                time: "2024-09-15T10:00:00",
-                gmap: "https://maps.google.com/maps?q=Ajibarang%20wetan%20Rt%2002%20Rw%2012&t=&z=13&ie=UTF8&iwloc",
-            }
-        ],
-
-        photo: [
-            { url: "/pasangan/2/1.jpeg", type: "cover" },
-            { url: "/pasangan/2/2.jpeg", type: "cover" },
-            { url: "/pasangan/2/3.jpeg", type: "album" },
-            { url: "/pasangan/2/4.jpeg", type: "album" },
-            { url: "/pasangan/2/5.jpeg", type: "album" },
-            { url: "/pasangan/2/6.jpeg", type: "album" },
-            { url: "/pasangan/2/7.jpeg", type: "male" },
-            { url: "/pasangan/2/8.jpeg", type: "female" },
-        ],
-
-        gift: [
-            {
-                accountName: "Jack",
-                bank: "Mandiri",
-                accountNumber: "98765"
-            }
-        ]
-    },
-    {
-        id: 3,
-        theme: "forest",
-        link: "tristan-isolde",
-
-        nicknameMale: "Tristan",
-        nicknameFemale: "Isolde",
-        fullnameMale: "Tristan Arman",
-        fullnameFemale: "Isolde Belinda",
-
-        dadMale: "Marcus Arman",
-        momMale: "Lucille Arman",
-        dadFemale: "Henry Belinda",
-        momFemale: "Margaret Belinda",
-
-        mainEventTime: "2024-07-20T16:00:00",
-
-        introductionType: 1,
-        greetingType: 2,
-        hookMiddle: 1,
-        storyType: 2,
-        closingType: 1,
-        songType: 1,
-
-        place: [
-            {
-                event: "Resepsi",
-                time: "2024-07-20T16:00:00",
-                gmap: "https://maps.google.com/maps?q=Ajibarang%20wetan%20Rt%2002%20Rw%2012&t=&z=13&ie=UTF8&iwloc",
-            }
-        ],
-
-        photo: [
-            { url: "/pasangan/3/1.jpeg", type: "cover" },
-            { url: "/pasangan/3/2.jpeg", type: "cover" },
-            { url: "/pasangan/3/3.jpeg", type: "album" },
-            { url: "/pasangan/3/4.jpeg", type: "album" },
-            { url: "/pasangan/3/5.jpeg", type: "album" },
-            { url: "/pasangan/3/6.jpeg", type: "album" },
-            { url: "/pasangan/3/7.jpeg", type: "male" },
-            { url: "/pasangan/3/8.jpeg", type: "female" },
-        ],
-
-        gift: [
-            {
-                accountName: "Tristan",
-                bank: "BNI",
-                accountNumber: "12345"
-            }
-        ]
-    }
-];
+]
+   

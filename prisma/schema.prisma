@@ -18,9 +18,9 @@ model User {
 }
 
 model Wedding {
-  id                String         @id 
+  id                String      @id 
   createdAt         DateTime    @default(now())
-  watermark         Boolean     @default(false)
+  watermark         Boolean     @default(true)
   theme             String
 
   nicknameMale      String
@@ -32,7 +32,7 @@ model Wedding {
   dadFemale         String
   momFemale         String
 
-  mainEventTime     DateTime
+  // mainEventTime     DateTime
 
   accountName1      String?
   accountBank1      String?
@@ -41,14 +41,25 @@ model Wedding {
   accountBank2      String?
   accountNumber2    String?
 
-  event1            String
-  address1          String
-  gmap1             String
-  time1             DateTime
+  event             String
+  address           String
+  gmap              String
+  time              DateTime
+
   event2            String?
   address2          String?
   gmap2             String?
   time2             DateTime?
+  isEvent2          Boolean @default(true)
+
+  // event1            String
+  // address1          String
+  // gmap1             String
+  // time1             DateTime
+  // event2            String?
+  // address2          String?
+  // gmap2             String?
+  // time2             DateTime?
 
   introductionType  Int
   greetingType      Int
@@ -61,6 +72,10 @@ model Wedding {
   images            Image[]
   userId            String
   user              User @relation(fields: [userId], references: [clerkid])
+
+  Confirmation Confirmation[]
+
+  Expression Expression[]
 }
 
 model Image {
@@ -80,7 +95,28 @@ model Invitation {
   whatsapp   String
   email      String
   check      Boolean  @default(false)
+  nickmale   String
+  nickfemale String
 
   weddingId  String
   wedding    Wedding  @relation(fields: [weddingId], references: [id])
 }
+
+model Confirmation {
+  confirmationId  Int   @id @default(autoincrement())
+  name            String
+  type            String
+  time            DateTime @default(now())
+  weddingId  String
+  wedding    Wedding  @relation(fields: [weddingId], references: [id])
+}
+
+model Expression {
+  expressionId Int @id @default(autoincrement())
+  name         String
+  expression   String
+  time         DateTime @default(now())
+  weddingId  String
+  wedding    Wedding  @relation(fields: [weddingId], references: [id])
+}
+

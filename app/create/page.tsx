@@ -4,10 +4,10 @@ import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useUser } from '@clerk/nextjs';
-import {formSchema, imageSchema} from './components/FormSchema'
-import { initialFormValues, initialImageValues } from "./components/InitialValue";
-import { saveWeddingClient } from "./components/SaveWeddingClient";
-import { saveImageClient } from "./components/SaveImageClient";
+import {formSchema, imageSchema} from './backend/FormSchema'
+import { initialFormValues, initialImageValues } from "./backend/InitialValue";
+import { saveWeddingClient } from "./backend/SaveWeddingClient";
+import { saveImageClient } from "./backend/SaveImageClient";
 
 // import Select from 'react-select'
 // import MakeAnimated from 'react-select/animated'
@@ -37,17 +37,67 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-
-
+import { useRouter } from "next/navigation";
+import Preview from "./components/Preview";
 
 
 type FormSchema = z.infer<typeof formSchema>;
 type ImageSchema = z.infer<typeof imageSchema>;
 
 
-function page() {
+function Create() {
+  const router = useRouter()
   const [formValues, setFormValues] = useState<FormSchema>(initialFormValues);
+  const [formPreview, setFormPreview] = useState({
+    id: "",
+    nicknameMale: "",
+    nicknameFemale: "",
+    fullnameMale: "",
+    fullnameFemale: "",
+    dadMale: "",
+    momMale: "",
+    dadFemale: "",
+    momFemale: "",
+    mainEventTime: new Date(),
+  
+    accountName1: "",
+    accountBank1: "",
+    accountNumber1: "",
+  
+    accountName2: "",
+    accountBank2: "",
+    accountNumber2: "",
+  
+    event1: "",
+    address1: "",
+    gmap1: "",
+    time1: new Date(),
+    
+    event2: "",
+    address2: "",
+    gmap2: "",
+    time2: new Date(),
+  
+    introductionType: 1,
+    greetingType: 1,
+    hookMiddleType: 1,
+    storyType: 1,
+    closingType: 1,
+  
+    songType: 1,
+  
+    theme:"",
+  
+    userId: "",
+  });
+  // Handle form input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormPreview({ ...formPreview, [name]: value });
+  };
+
   const [page2, setPage2] = useState(0);
+
 
   const [date, setDate] = useState<Date | undefined>(formValues.mainEventTime);
   const [time1, setTime1] = useState<Date | undefined>(formValues.time1)
@@ -85,6 +135,20 @@ function page() {
     setValue('id', uuidWedding);
   }, [date, setValue, time1, time2, isLoaded]);
 
+  const onPreview: SubmitHandler<FormSchema> = async (data) => {
+    setFormValues(data);
+  };
+
+  const handleFormSubmitInternal = (event: React.FormEvent) => {
+    event.preventDefault();
+    // Panggil onPreview jika tombol preview diklik
+    onPreview(formValues);
+  };
+  
+
+
+
+
   const onSubmit: SubmitHandler<FormSchema> = async (data) => {
     const formData = new FormData();
     Object.keys(data).forEach(key => {
@@ -112,6 +176,8 @@ function page() {
     } else {
       console.error("Wedding data was not saved correctly, missing id.");
     }
+
+    router.push(`/dashboard/${data.id}`);
   };
 
   
@@ -121,6 +187,8 @@ function page() {
       form.requestSubmit(); // Memastikan hanya memanggil requestSubmit sekali
     }
   };
+
+
 
   const renderSectionBridalData = () => {
     return(
@@ -736,8 +804,10 @@ function page() {
 
   return (
     <div className="px-1 md:px-4 container pt-4 flex flex-col md:flex-row gap-1 md:gap-4 lg:gap-6 ">
-      <div className="top-5 basis-full  md:basis-3/6  bg-[url('/paper.svg')] dark:bg-[url('/paper-dark.svg')]">
-        halo 
+      <h2>{formValues.nicknameMale}</h2>
+      <h2>{formValues.nicknameFemale}</h2>
+      <div className="top-5 basis-full  md:basis-3/6  bg-[url('/paper.svg')] dark:bg-[url('/paper-dark.svg')] flex justify-center no-scroll py-10">
+        {/* <Preview formData={undefined} theme="FlowerGarden"/> */}
 
       </div>
 
@@ -834,6 +904,14 @@ function page() {
 
             </Accordion>
 
+            <button
+                type="submit"
+                onClick={handleFormSubmitInternal} 
+                className="py-2 px-4 bg-gray-500 text-white rounded-md"
+              >
+                Preview
+              </button>
+
               <button
                 type="button"
                 onClick={() => document.getElementById('alertDialog')?.classList.remove('hidden')}
@@ -841,6 +919,8 @@ function page() {
               >
                 Simpan
               </button>
+
+
 
               <div id="alertDialog" className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md w-[420px]">
@@ -872,4 +952,4 @@ function page() {
   )
 }
 
-export default page
+export default Create

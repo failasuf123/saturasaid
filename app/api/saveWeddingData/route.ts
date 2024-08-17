@@ -16,7 +16,6 @@ export async function POST(req: NextRequest) {
       momMale,
       dadFemale,
       momFemale,
-      mainEventTime,
 
       accountName1,
       accountBank1,
@@ -26,15 +25,17 @@ export async function POST(req: NextRequest) {
       accountBank2,
       accountNumber2,
 
-      event1,
-      address1,
-      gmap1,
-      time1,
-      
+      event,
+      address,
+      gmap,
+      time,
+
       event2,
       address2,
       gmap2,
       time2,
+      isEvent2,
+    
 
       introductionType,
       greetingType,
@@ -46,13 +47,17 @@ export async function POST(req: NextRequest) {
       userId,
     } = await req.json();
 
-    const mainEventTimeDate = new Date(mainEventTime);
-    const time1Date = new Date(time1);
-    const time2Date = time2 ? new Date(time2) : null;
+    
+    const timeDate = new Date(time);
+    const timeDate2 = new Date(time2);
 
-    if (isNaN(mainEventTimeDate.getTime()) || isNaN(time1Date.getTime()) || (time2Date && isNaN(time2Date.getTime()))) {
+    if (isNaN(timeDate.getTime())) {
       return NextResponse.json({ error: "Invalid date format" }, { status: 400 });
     }
+    if (isNaN(timeDate2.getTime())) {
+      return NextResponse.json({ error: "Invalid date format" }, { status: 400 });
+    }
+    
 
     const result = await prisma.wedding.create({
       data: {
@@ -65,21 +70,21 @@ export async function POST(req: NextRequest) {
         momMale,
         dadFemale,
         momFemale,
-        mainEventTime: mainEventTimeDate,
         accountName1,
         accountBank1,
         accountNumber1,
         accountName2,
         accountBank2,
         accountNumber2,
-        event1,
-        address1,
-        gmap1,
-        time1: time1Date,
+        event,
+        address,
+        gmap,
+        time: timeDate,
         event2,
         address2,
         gmap2,
-        time2: time2Date,
+        time2:timeDate2,
+        isEvent2,
         introductionType,
         greetingType,
         hookMiddleType,

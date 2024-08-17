@@ -2,6 +2,7 @@ import React from 'react';
 import { WeddingBannerList } from '@/shared/WeddingBannerList';
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge"
+import Link from 'next/link';
 
 function TemplateWeddingList() {
     const data = WeddingBannerList;
@@ -9,6 +10,7 @@ function TemplateWeddingList() {
     return (
         <div className="w-full gap-3 py-8 md:gap-5 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
             {data.map((item) => (
+                <Link key={item.id} href={`/preview/${item.theme}`}>
                 <Card key={item.id} className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden hover:scale-105 cursor-pointer group">
                     <img src={item.image} alt={item.theme} className="w-full h-42 md:h-52 lg:h-60 object-cover group-hover:object-contain transition-all duration-300" />
                     <div className="px-2 py-1 md:p-4">
@@ -22,6 +24,7 @@ function TemplateWeddingList() {
                         ))}
                     </div>
                 </Card>
+                </Link>
             ))}
         </div>
     );

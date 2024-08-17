@@ -26,11 +26,14 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-            <header>
-              <SignedOut>
-                <SignInButton />
-              </SignedOut>
+            <header className="flex flex-row ">
+              {/* <SignedOut>
+                <SignInButton >
+                  <button className="px-3 py-2 bg-gray-800 text-white rounded-2xl hover:scale-95">Signin</button>
+                </SignInButton >
+              </SignedOut> */}
               <SignedIn>
+                
              
               </SignedIn>
             </header>

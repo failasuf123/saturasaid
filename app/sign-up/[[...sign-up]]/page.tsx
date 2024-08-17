@@ -10,8 +10,7 @@ export default function Page() {
 
   useEffect(() => {
     if (isLoaded && userId) {
-      console.log("Redirecting to /testingtoid");
-      router.push('/testingtoid');
+      router.push('/validate');
     } else {
       console.log("Not redirecting. isLoaded:", isLoaded, "userId:", userId);
     }
@@ -19,7 +18,7 @@ export default function Page() {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <SignUp redirectUrl="/testingtoid"/>
+      <SignUp redirectUrl="/validate"/>
     </div>
   );
 }

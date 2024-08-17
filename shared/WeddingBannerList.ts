@@ -1,10 +1,11 @@
 export const WeddingBannerList = [
     {
         id: 1,
-        theme: "Rose",
+        theme: "FlowerGarden",
         image: "/banner-wedding/1.png",
         description: "Tema bunga mawar merah yang elegan.",
         badge:["elegan", "royal"],
+        url:"",
         used:144,
     },
     {
@@ -13,6 +14,7 @@ export const WeddingBannerList = [
         image: "/banner-wedding/2.png",
         description: "Tema bunga lavender yang tenang dan romantis.",
         badge:["traditional"],
+        url: "/",
         used:52,
     },
     {
@@ -21,6 +23,7 @@ export const WeddingBannerList = [
         image: "/banner-wedding/3.png",
         description: "Tema bunga matahari yang cerah dan menyenangkan.",
         badge:["traditional", "professional"],
+        url: "/",
         used:12,
     },
     {
@@ -29,6 +32,7 @@ export const WeddingBannerList = [
         image: "/banner-wedding/4.png",
         description: "Tema bunga anggrek yang eksotis dan mewah.",
         badge:["kekinian", "romantis"],
+        url: "/",
         used:38,
     },
     {
@@ -37,6 +41,7 @@ export const WeddingBannerList = [
         image: "/banner-wedding/5.png",
         description: "Tema bunga tulip yang sederhana dan elegan.",
         badge:["elegan", "traditional"],
+        url: "/",
         used:40,
     },
     {
@@ -45,6 +50,7 @@ export const WeddingBannerList = [
         image: "/banner-wedding/6.png",
         description: "Tema bunga aster yang segar dan ceria.",
         badge:["culture", "old money"],
+        url: "/",
         used:151,
     },
     {
@@ -53,6 +59,7 @@ export const WeddingBannerList = [
         image: "/banner-wedding/1.png",
         description: "Tema bunga mawar merah yang elegan.",
         badge:["elegan", "royal"],
+        url: "/",
         used:119,
     },
     {
@@ -61,6 +68,7 @@ export const WeddingBannerList = [
         image: "/banner-wedding/2.png",
         description: "Tema bunga lavender yang tenang dan romantis.",
         badge:["traditional"],
+        url: "/",
         used:27,
     },
     {
@@ -69,6 +77,7 @@ export const WeddingBannerList = [
         image: "/banner-wedding/3.png",
         description: "Tema bunga matahari yang cerah dan menyenangkan.",
         badge:["old money", "elegan"],
+        url: "/",
         used:33,
     },
     {
@@ -77,6 +86,7 @@ export const WeddingBannerList = [
         image: "/banner-wedding/4.png",
         description: "Tema bunga anggrek yang eksotis dan mewah.",
         badge:["old money", "culture"],
+        url: "/",
         used:35,
     },
     {
@@ -85,6 +95,7 @@ export const WeddingBannerList = [
         image: "/banner-wedding/5.png",
         description: "Tema bunga tulip yang sederhana dan elegan.",
         badge:["culture", "traditional"],
+        url: "/",
         used:32,
     },
     {
@@ -93,6 +104,7 @@ export const WeddingBannerList = [
         image: "/banner-wedding/6.png",
         description: "Tema bunga aster yang segar dan ceria.",
         badge:["romance", "kekinian"],
+        url: "/",
         used:48,
     }
 ];

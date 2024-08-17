@@ -113,7 +113,7 @@ function Cover({ currentUser, showBtn, onOpenInvitation }: CoverProps) {
         </div>
 
         <div className="mt-2 z-10">
-          <p className={`text-5xl text-gray-700 border-sm underline decoration-gray-600 ${playball.className}`}>{currentUser?.nicknameMale} & {currentUser?.nicknameMale} </p>
+          <p className={`text-5xl text-gray-700 border-sm underline decoration-gray-600 ${playball.className}`}>{currentUser?.nicknameMale} & {currentUser?.nicknameFemale} </p>
         </div>
       </div>
 

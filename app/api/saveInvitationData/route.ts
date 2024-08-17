@@ -12,6 +12,8 @@ export async function POST(req: NextRequest) {
       whatsapp,
       email,
       check,
+      nickmale,
+      nickfemale,
       weddingId,
     } = await req.json();
 
@@ -22,6 +24,8 @@ export async function POST(req: NextRequest) {
         whatsapp,
         email,
         check,
+        nickmale,
+        nickfemale,
         weddingId,
       }
     });
