@@ -1,6 +1,16 @@
-import { BridalCouple } from "@/typings";
+import { BridalCouple, User } from "@/typings";
 
-export const BridalCoupleList = [
+export const UserList: User[] = [
+    {
+        id: 1,
+        clerkid: "some_clerk_id",
+        createdAt: new Date("2024-08-10T14:00:00"),
+        updatedAt: new Date("2024-08-10T14:00:00"),
+        weddings: [] // Daftar BridalCouple yang terkait
+    }
+];
+
+export const BridalCoupleList: BridalCouple[] = [
     {
         id: "1",
         theme: "FlowerGarden",
@@ -15,14 +25,12 @@ export const BridalCoupleList = [
         dadFemale: "Supardi Joko Handoyo",
         momFemale: "Husna Mobarok",
 
-
         introductionType: 1,
         greetingType: 2,
         hookMiddleType: 1,
         storyType: 2,
         closingType: 1,
         songType: 1,
-
 
         event: "Akad Nikah",
         time: new Date("2024-08-10T14:00:00"),
@@ -35,18 +43,7 @@ export const BridalCoupleList = [
         address2: "Jaln Untung Suprapto No 8 Ciwidey",
         isEvent2: true,
 
-
-        photo: [
-            { url: "/pasangan/1/1.jpeg", type: "cover" },
-            { url: "/pasangan/1/2.jpeg", type: "cover" },
-            { url: "/pasangan/1/3.jpeg", type: "album" },
-            { url: "/pasangan/1/4.jpeg", type: "album" },
-            { url: "/pasangan/1/5.jpeg", type: "album" },
-            { url: "/pasangan/1/6.jpeg", type: "album" },
-            { url: "/pasangan/1/7.jpeg", type: "male" },
-            { url: "/pasangan/1/8.jpeg", type: "female" },
-        ],
-
+        images: [],
 
         accountName1: "BNI",
         accountBank1: "Romeo",
@@ -55,7 +52,13 @@ export const BridalCoupleList = [
         accountName2: "BSI",
         accountBank2: "Juliate",
         accountNumber2: "127490",
-        userId: ""
-    },
-]
-   
+        userId: "1",
+
+        createdAt: new Date("2024-08-10T14:00:00"),
+        watermark: false,
+        invitations: [],
+        user: UserList[0], // Set user dengan objek User yang valid
+        confirmation: [],
+        expression: []
+    }
+];

@@ -97,4 +97,4 @@
     wedding: BridalCouple;
   }
   
-  export {BridalCouple, Image, Confirmation, Expression, Invitation}
+  export {BridalCouple, Image, Confirmation, Expression, Invitation, User}
