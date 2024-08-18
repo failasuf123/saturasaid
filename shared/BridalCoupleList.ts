@@ -1,6 +1,6 @@
 import { BridalCouple } from "@/typings";
 
-export const BridalCoupleList: BridalCouple[] = [
+export const BridalCoupleList = [
     {
         id: "1",
         theme: "FlowerGarden",

@@ -10,7 +10,7 @@ export const WeddingBannerList = [
     },
     {
         id: 2,
-        theme: "Lavender",
+        theme: "HeritageOfIndonesiaNavy",
         image: "/banner-wedding/2.png",
         description: "Tema bunga lavender yang tenang dan romantis.",
         badge:["traditional"],
