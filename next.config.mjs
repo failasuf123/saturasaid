@@ -1,12 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental:{
-        serverActions: true
-    },
-    images:{
-        remotePatterns:[
+    images: {
+        remotePatterns: [
             {
-                hostname:"utfs.io",
+                hostname: "utfs.io",
             }
         ]
     }
