@@ -16,11 +16,14 @@ export async function GET(req: Request) {
       where: {
         weddingId: id,
       },
+      select: {
+        name: true,
+        expression: true,
+        time: true,
+      },
     });
     return NextResponse.json(guests, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: 'Something went wrong' }, { status: 500 });
   }
 }
-
-

@@ -155,7 +155,7 @@ export const columns: ColumnDef<Guests>[] = [
       const rowIndex = parseInt(row.id, 10) + 1;
 
       return (
-        <div className="capitalize">
+        <div >
           {rowIndex}
         </div>
       );
@@ -176,7 +176,7 @@ export const columns: ColumnDef<Guests>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("name")}</div>,
+    cell: ({ row }) => <div >{row.getValue("name")}</div>,
   },
   {
     accessorKey: "whatsapp",
@@ -184,7 +184,7 @@ export const columns: ColumnDef<Guests>[] = [
     cell: ({ row }) => {
       const value = row.getValue<string>("whatsapp") || ""; 
       return (
-        <div className="capitalize">
+        <div >
           {value === "" ? <em className="font-light text-xs">no data</em> : value}
         </div>
       );
@@ -196,7 +196,7 @@ export const columns: ColumnDef<Guests>[] = [
     cell: ({ row }) => {
       const value = row.getValue<string>("email") || ""; 
       return (
-        <div className="capitalize">
+        <div >
           {value === "" ? <em className="font-light text-xs">no data</em> : value}
         </div>
       );
@@ -298,8 +298,7 @@ export const DataTableDemo: React.FC<DataTableDemoProps> = ({ id }) => {
   const [invitation, setInvitation] = useState<FormSchema | null>(null); 
   const [loading, setLoading] = useState(true);
 
-  console.log("ID", id)
-  console.log("INVITATION DATA", invitation)
+ 
 
   useEffect(() => {
     if (initialGuests) {
@@ -314,8 +313,6 @@ export const DataTableDemo: React.FC<DataTableDemoProps> = ({ id }) => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
-  console.log("Initial Guests Values", initialGuests)
-  console.log("guests", guests)
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
@@ -375,17 +372,14 @@ export const DataTableDemo: React.FC<DataTableDemoProps> = ({ id }) => {
     const encodedName = encodeURIComponent(data.name); // Encode the name
     const url = `localhost:2000/${data.weddingId}/${encodedName}`; // Use the encoded name in the URL
     data.url = url; 
-    console.log("ON SUBMIT CALLED");
     toast('⏱️ Membuat Undangan', {
       position: "bottom-right",autoClose: 2000,hideProgressBar: true,closeOnClick: true, 
       pauseOnHover: true, draggable: true, progress: undefined,theme: "dark",
       });
 
     try {
-      console.log("Form submitted, calling saveGuestClient...");
       const result = await saveGuestClient(data);
-      console.log("Form data:", data);
-      console.log("Guest data saved:", result);
+  
 
       setGuests((prevGuests) => [...prevGuests, data as Guests]);
       toast.success(`Undangan ${data.name} berhasil dibuat 🎊`,{
@@ -404,8 +398,7 @@ export const DataTableDemo: React.FC<DataTableDemoProps> = ({ id }) => {
 
   return (
     <div className="w-full">
-      <div>Status: {}</div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center pb-4">
         <Input
           placeholder="Filter nama..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -428,7 +421,7 @@ export const DataTableDemo: React.FC<DataTableDemoProps> = ({ id }) => {
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
-                    className="capitalize"
+                    
                     checked={column.getIsVisible()}
                     onCheckedChange={(value) =>
                       column.toggleVisibility(!!value)

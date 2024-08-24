@@ -18,7 +18,7 @@ export default function Links({ params }: { params: { invitation: string; name: 
   const [female, setFemale] = useState<string | null>(null);
   // const [album, setAlbum] = useState<Image[]>([]);
   const [album, setAlbum] = useState<string[]>([]);
-
+  const [isWatermark, setIsWatermark] = useState<boolean>(false)
   const router = useRouter();
 
   useEffect(() => {
@@ -46,13 +46,13 @@ export default function Links({ params }: { params: { invitation: string; name: 
         const templateName = currentUser.theme;
         console.log("theme",currentUser.theme)
         setTemplateShow(templateName);
+        setIsWatermark(currentUser.watermark)
       }
     };
 
     findTemplateDesain();
   }, [currentUser]);
 
-  // Fetch image data based on weddingId after currentUser is set
   useEffect(() => {
     const fetchImageData = async () => {
       if (currentUser) {
@@ -114,24 +114,69 @@ export default function Links({ params }: { params: { invitation: string; name: 
   ssr: false,
 });
 
+const Watermark = () => {
+  return (
+    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-50 opacity-50">
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative bg-white rounded py-2 px-2">
+            <h2 className="font-bold text-2xl bg-gradient-to-r from-red-400 to-blue-400 text-transparent bg-clip-text">
+              WATERMARK
+            </h2>
+            <h2 className="font-bold text-xl bg-gradient-to-r from-red-400 to-blue-400 text-transparent bg-clip-text">
+              saturasa.id
+            </h2>
+            <blockquote className="text-xs mt-2 text-gray-500">
+              kesempatan anda membuat undangan pernikahan online secara gratis
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
   return (
     <div>
       {loading ? (
-        <div>Loading...</div>
+        <div className="fixed inset-0 flex flex-col justify-center items-center bg-gray-900  z-50">
+          <div className="relative flex justify-center items-center">
+            <div className="absolute animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-purple-500"></div>
+          </div>
+          <div>
+            <h2 className="font-bold text-xl bg-gradient-to-r from-red-400 to-blue-400 text-transparent bg-clip-text">
+              saturasa.id
+            </h2>
+          </div>
+          <div className="mt-20 text-xl text-center px-10 md:px-3">
+            <h2  className="animate-pulse text-white">Loading...</h2>
+          </div>
+          <div className="mt-10 text-md text-center px-10 md:px-3">
+            <h2  className="animate-pulse text-white">Matikan dark mode untuk mendapat tampilan maksimal</h2>
+          </div>
+        </div>
       ) : (
         <div>
-          <h2>Guest: {name}</h2>
-          <h2>Nickmale: {currentUser?.nicknameMale}</h2>
-          <h2>Nickfemale: {currentUser?.nicknameFemale}</h2>
-          <h2>cover: {cover}</h2>
-          <h2>Album: {album[0]}</h2>
           {Template ? (
+            <div>
+              <Template currentUser={currentUser} cover={cover} male={male} female={female} album={album} name={name} />
+              <div className="fixed bottom-36 left-1/2  p-1 rounded-lg flex justify-center items-center h-15 w-72 z-50">
+                  <Link href="/">
+                    <div className="flex items-center justify-center bg-white-50 text-gray-500 py-2 px-4 rounded-md animate-blink w-full">
+                        {/* <GiClick className="mr-2 text-md" />
+                        <p>WaterMark</p> */}
+                        {isWatermark && <Watermark />}
+                    </div>
+                  </Link>
+              </div>
+            </div>
             
-            <Template currentUser={currentUser} cover={cover} male={male} female={female} album={album} name={name} />
           ) : (
             <div>Loading template...</div>
+
           )}
+
         </div>
       )}
     </div>

@@ -46,7 +46,7 @@ export const useInvitation = (id: string) => {
     const fetchInvitation = async () => {
       try {
         const response = await axios.get(`/api/getInvitationData?id=${id}`);
-        console.log("RESPONSE", response)
+        // console.log("RESPONSE", response)
         setInvitation(response.data);
       } catch (err) {
         console.error('Error fetching invitation data', err);
@@ -56,6 +56,6 @@ export const useInvitation = (id: string) => {
 
     fetchInvitation();
   }, [id]);
-  console.log("INVITE CONST", invitation)
+  // console.log("INVITE CONST", invitation)
   return { invitation, error };
 };

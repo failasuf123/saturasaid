@@ -4,6 +4,7 @@ const isProtectedRoute = createRouteMatcher([
   '/dashboard(.*)', // Lindungi semua rute yang dimulai dengan /dashboard
   '/create(.*)',
   '/preview(.*)',
+  '!/api/transaction(.*)', 
 ]);
 
 export default clerkMiddleware((auth, req) => {

@@ -7,12 +7,13 @@ import { FaEnvelope } from 'react-icons/fa';
 import { IoIosHeart, IoMdMusicalNote} from 'react-icons/io';
 import { motion, useInView } from 'framer-motion';
 import { MdTimer } from "react-icons/md";
-import {BridalCoupleList} from '@/shared/BridalCoupleList';
 import { BridalCouple } from '@/typings';
-import { userInfo } from 'os';
 import { FaCopy } from 'react-icons/fa'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -29,6 +30,7 @@ const HeritageOfIndonesiaNavy: React.FC<HeritageOfIndonesiaNavyProps> = ({ curre
   if (!currentUser) {
     return <div>Loading...</div>;
   }
+
   
   const [isInvitationOpened, setIsInvitationOpened] = useState(false);
   const [isIntroductionVisible, setIsIntroductionVisible] = useState(false);
@@ -100,8 +102,10 @@ const HeritageOfIndonesiaNavy: React.FC<HeritageOfIndonesiaNavyProps> = ({ curre
           <Place2 currentUser={currentUser} />
           <Story currentUser={currentUser} />
           <Album currentUser={currentUser} />
-          <Gift currentUser={currentUser} />
-          <Closing currentUser={currentUser}/>
+          <Gift currentUser={currentUser}/>
+          <Closing currentUser={currentUser}  name={name}/>
+
+          
         </div>
       </div>
     </div>
@@ -689,7 +693,6 @@ const Place2 = ({ currentUser }: { currentUser: BridalCouple| null }) =>  {
 }
 
 
-
 const Story = ({ currentUser }: { currentUser: BridalCouple| null }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -840,7 +843,17 @@ const Gift = ({ currentUser }: { currentUser: BridalCouple| null }) => {
   const handleCopy = () => {
     const accountNumber = "18928199201";
     navigator.clipboard.writeText(accountNumber).then(() => {
-      alert("Nomor rekening berhasil disalin!");
+      toast('Nomor Rekening Berhasil Disalin!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }).catch(err => {
       console.error('Gagal menyalin teks: ', err);
     });
@@ -895,49 +908,228 @@ const Gift = ({ currentUser }: { currentUser: BridalCouple| null }) => {
     </div>
   );
 }
+interface Expression {
+  name: string;
+  expression: string;
+  time: string;
+}
 
-const Closing = ({ currentUser }: { currentUser: BridalCouple| null }) =>  {
+const Closing = ({ currentUser, name }: { currentUser: BridalCouple | null, name: string }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   const [message, setMessage] = useState("");
+  const [ucapan, setUcapan] = useState<Expression[]>([]);
+  const [attendance, setAttendance] = useState("bisa-hadir");
+  const colors = ["#FF6B6B", "#4ECDC4", "#FFD93D", "#1A535C", "#FF6F61", "#6B5B95", "#88B04B", "#F7CAC9", "#92A8D1", "#034F84"];
 
-  const handleSendGreeting = () => {
+  const getColor = (name) => {
+    const index = name.charCodeAt(0) % colors.length;
+    return colors[index];
+  };
+
+  const handleAttendanceConfirmation = async () => {
+    toast("Mengirim Konfirmasi Kehadiran....", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+      });
+    try {
+      const response = await fetch('/api/saveConfirmationData', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          type: attendance,
+          weddingId: currentUser?.id,
+        }),
+      });
+
+      if (response.ok) {
+        toast.success('Konfirmasi Kehadiran Berhasil Dikirim!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
+      } else {
+        console.error("Gagal menyimpan konfirmasi kehadiran");
+        toast("Gagal menyimpan konfirmasi kehadiran, silakan coba lagi.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
+      }
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+      toast("Gagal menyimpan konfirmasi kehadiran, silakan coba lagi.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+    }
+  };
+
+  const handleSendGreeting = async () => {
     if (message.trim() === "") {
-      alert("Anda belum menuliskan ucapan");
+      toast('Anda belum menulis ucapan!', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
       return;
     }
-    // Logika untuk mengirim ucapan bisa dimasukkan di sini.
-    console.log("Ucapan terkirim:", message);
-    alert("Ucapan Anda telah terkirim!");
-    setMessage(""); // Reset text field setelah pengiriman
-  };
-  return(
-    <div className="min-h-screen relative w-[500px] text-2xl py-5 bg-[url('/template2/bg-phone-navy.png')] flex flex-col justify-start items-center">
-      
-      <div className="z-20">
-        <h2 className={`${bilbo.className} text-4xl mb-5 text-[#D9C7A4] `}>Konfirmasi Kehadiran</h2>
-      </div>
+    toast("Mengirim Ucapan...", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+      });
 
+    try {
+      const response = await fetch('/api/saveExpressionData', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          expression: message,
+          weddingId: currentUser?.id,
+        }),
+      });
+
+      if (response.ok) {
+        const newGreeting = {
+          name,
+          expression: message,
+          time: new Date().toLocaleString(),
+        };
+        setUcapan((prevUcapan) => [newGreeting, ...prevUcapan]);
+        setMessage(""); // Reset text field setelah pengiriman
+        toast.success('Ucapan Anda Berhasil Dikirim!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
+      } else {
+        console.error("Gagal mengirim ucapan");
+        toast('Gagal mengirim ucapan, silakan coba lagi!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
+      }
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);      
+      toast.error('Terjadi kesalahan, coba beberapa saat lagi', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+    }
+  };
+
+  useEffect(() => {
+    const fetchUcapan = async () => {
+      try {
+        const response = await fetch(`/api/getExpressionData?id=${currentUser?.id}`);
+        const data = await response.json();
+        setUcapan(data);
+      } catch (error) {
+        console.error('Error fetching ucapan:', error);
+      }
+    };
+
+    fetchUcapan();
+  }, [currentUser?.id]);
+
+ 
+  return (
+    <div className="min-h-screen relative w-[500px] text-2xl py-5 bg-[url('/template2/bg-phone-navy.png')] flex flex-col justify-start items-center">
+      {/* Konfirmasi Kehadiran */}
+      <div className="z-20">
+        <h2 className="text-4xl mb-5 text-[#D9C7A4]">Konfirmasi Kehadiran</h2>
+      </div>
       <div className="flex flex-col gap-5 items-center justify-center z-20">
-        <RadioGroup defaultValue="comfortable">
+        <RadioGroup value={attendance} onValueChange={setAttendance}>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem className="text-white" value="default" id="r1" />
+            <RadioGroupItem className="text-white" value="bisa-hadir" id="r1" />
             <Label className="text-white" htmlFor="r1">Bisa Hadir</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem className="text-white" value="comfortable" id="r2" />
+            <RadioGroupItem className="text-white" value="belum-bisa-hadir" id="r2" />
             <Label className="text-white" htmlFor="r2">Belum Bisa Hadir</Label>
           </div>
           <div className="flex items-center space-x-2">
-            <RadioGroupItem className="text-white" value="compact" id="r3" />
+            <RadioGroupItem className="text-white" value="belum-tau" id="r3" />
             <Label className="text-white" htmlFor="r3">Belum Tau</Label>
           </div>
         </RadioGroup>
-        <button className="text-white px-3 py-1 text-sm rounded bg-[#D9C7A4] text-white hover:scale-105 cursor-pointer">Konfirmasi</button>
+        <button
+          onClick={handleAttendanceConfirmation}
+          className="text-white px-3 py-1 text-sm rounded bg-[#D9C7A4] text-white hover:scale-105 cursor-pointer"
+        >
+          Konfirmasi
+        </button>
       </div>
 
-      <div className="z-20">
-        <h2 className={`${bilbo.className} text-4xl my-5 text-[#D9C7A4] `}>Kirim Ucapan</h2>
+      {/* Form Ucapan */}
+      <div className="z-20 mt-10">
+        <h2 className="text-4xl mb-5 text-[#D9C7A4]">Kirim Ucapan</h2>
       </div>
       <div className="flex flex-col gap-5 items-center justify-center z-20">
         <textarea
@@ -954,7 +1146,7 @@ const Closing = ({ currentUser }: { currentUser: BridalCouple| null }) =>  {
         </button>
       </div>
 
-      <div className="mt-5 px-16 z-20">
+      <div className="mt-20 px-16 z-20">
         <h2 className="text-center text-[#D9C7A4] text-sm mx-10">Merupakan Suatu Kebahagiaan dan Kehormatan bagi Kami, Apabila Bapak/Ibu/Saudara/i, Berkenan Hadir di Acara kami</h2>
         <h2 className={`${bilbo.className} text-5xl text-center text-[#D9C7A4] mt-5`}>{currentUser?.nicknameMale} & {currentUser?.nicknameFemale}</h2>
       </div>
@@ -964,10 +1156,51 @@ const Closing = ({ currentUser }: { currentUser: BridalCouple| null }) =>  {
         <img className=" w-[200px] absolute bottom-0 right-[-80px] object-contain animate-pulse " src="/template2/flower1.png" alt="" />
         <img className=" w-[200px] absolute top-0 left-0 object-contain animate-pulse" src="/template2/flower1.png" alt="" />
       </div>
+
+      {/* Daftar Ucapan */}
+      <div className="px-16 mb-10 md:px-10 mt-12 ">
+        <h2 className="text-3xl text-[#D9C7A4]  mb-10 text-center">Ucapan :</h2>
+        <ScrollArea className="h-[200px] md:h-[300px] fixed ">
+          {ucapan.map((guest, index) => (
+            <div key={index} className="flex gap-5 items-start px-5">
+              <div className=" basis-1/5">
+                <div
+                  className="flex items-center justify-center w-10 h-10 rounded-full text-white text-sm"
+                  style={{ backgroundColor: getColor(guest.name) }}
+                  >
+                  {guest.name
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')
+                    .toUpperCase()}
+                </div>
+              </div>
+              <div className="flex flex-col justify-start gap-1 basis-4/5">
+                <div className="font-semibold text-white text-xl">{guest.name}</div>
+                <div className="text-sm text-gray-300  text-wrap">{guest.expression}</div>
+                <div className="text-xs text-gray-500">{guest.time}</div> {/* Waktu pengiriman pesan */}
+              </div>
+            </div>
+          ))}
+        </ScrollArea>
+      </div>
+      <ToastContainer
+            position="top-right"
+            className="text-sm"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+            transition={Bounce}
+          />
     </div>
   );
 }
-
 
 export default HeritageOfIndonesiaNavy;
 

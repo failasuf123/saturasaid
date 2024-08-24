@@ -44,10 +44,10 @@ const UserProfileDisplay: React.FC<UserProfileDisplayProps> = ({
 
   return (
     // <ScrollArea className="w-full max-w-[1740px] h-[1000px] mx-auto flex flex-col items-center snap-y snap-mandatory">
-    <ScrollArea className="h-[500px] md:h-[1000px] fixed relative">
+    <ScrollArea className="h-[500px] md:h-[1000px] fixed ">
     <div>
 
-        <div className="flex flex-col scale-75 md:scale-100 ">
+        <div className="flex flex-col md:scale-100 ">
           {Template ? (
             <Template formPreview={formPreview} coverUrl={coverUrl} maleUrl={maleUrl} femaleUrl={femaleUrl} albumUrl={albumUrl} />
           ) : (

@@ -129,7 +129,7 @@ interface CoverProps {
 
 function Cover({ formPreview, coverUrl, showBtn, onOpenInvitation }: CoverProps) {
   return (
-    <div className="flex justify-center items-center relative min-h-screen w-[500px] flex-col bg-[url('/template2/bg-phone-navy.png')] justify-center pb-10 text-2xl overflow-hidden">      <div className="flex flex-col items-center">
+    <div className="flex justify-center items-center relative min-h-screen w-full md:w-[500px] flex-col bg-[url('/template2/bg-phone-navy.png')] justify-center pb-10 text-2xl overflow-hidden">      <div className="flex flex-col items-center">
         <div className="mt-5 z-10">
           <p className={`text-[#D9C7A4] text-3xl ${playball.className}`}>The Wedding of</p>
         </div>
@@ -235,7 +235,7 @@ function Introduction({ formPreview, albumUrl, isVisible }: IntroductionProps) {
   const finalImages = duplicateImages(images);
 
   return (
-    <div id="introduction" className={`relative min-h-screen w-[500px] flex flex-col bg-[url('')] text-2xl overflow-hidden snap-center ${isVisible ? 'animate-fade-up' : ''} bg-[url(/template2/bg-phone-navy.png)]`}>
+    <div id="introduction" className={`relative min-h-screen md:w-[500px] flex flex-col bg-[url('')] text-2xl overflow-hidden snap-center ${isVisible ? 'animate-fade-up' : ''} bg-[url(/template2/bg-phone-navy.png)]`}>
       <style>
         {`
           @keyframes slide {
@@ -318,7 +318,7 @@ const Greeting = ({ formPreview }: { formPreview: FormPreview }) => {
   const typeToFind = formPreview.greetingType
   const greetingData = GreetingList.find(item => item.type === typeToFind);
   return(
-    <div  className="min-h-[500px] h-[700px] relative w-[500px] flex flex-col bg-[url('/template2/bg-phone-navy.png')] items-center justify-center bg-white text-2xl snap-start snap-always ">
+    <div  className="min-h-[500px] h-[700px] relative md:w-[500px] flex flex-col bg-[url('/template2/bg-phone-navy.png')] items-center justify-center bg-white text-2xl snap-start snap-always ">
       <motion.div 
         ref={ref}
         className="flex flex-col items-center justify-center z-10 bg-[url(/stripes.svg)]"
@@ -348,7 +348,7 @@ const Greeting = ({ formPreview }: { formPreview: FormPreview }) => {
         </div>
       </motion.div>
       <div>
-        <img className="min-h-screen w-[500px] absolute top-0 left-0 object-cover " src="/template1/14.png" alt="" />
+        <img className="min-h-screen md:w-[500px] absolute top-0 left-0 object-cover " src="/template1/14.png" alt="" />
       </div>
 
       <div className="absolute z-10 left-1/2 top-3/5">
@@ -365,7 +365,7 @@ const Bride = ({ formPreview, femaleUrl }: { formPreview: FormPreview, femaleUrl
   const isInView = useInView(ref, { once: true });
 
   return (
-    <div ref={ref} className="min-h-screen relative w-[500px] flex flex-col justify-between bg-[url('/template2/bg-phone-navy.png')] items-center bg-white text-2xl snap-start snap-always ">
+    <div ref={ref} className="min-h-screen relative md:w-[500px] flex flex-col justify-between bg-[url('/template2/bg-phone-navy.png')] items-center bg-white text-2xl snap-start snap-always ">
       <motion.div 
         className="w-64 h-72 p-3 rounded-t-full rounded-b-xl mt-6 ml-36  mb-4 z-10 bg-gradient-to-t from-slate-50 to-orange-200"
         initial={{ opacity: 0, y: 50 }}
@@ -411,7 +411,7 @@ const Bride = ({ formPreview, femaleUrl }: { formPreview: FormPreview, femaleUrl
       </div>
       <div className="">
 
-        <img className=" w-[500px] absolute top-0 left-0 object-contain " src="/template2/line2.png" alt="" />
+        <img className=" md:w-[500px] absolute top-0 left-0 object-contain " src="/template2/line2.png" alt="" />
       </div>
 
     </div>
@@ -424,7 +424,7 @@ const Groom = ({ formPreview, maleUrl }: { formPreview: FormPreview, maleUrl: st
   const isInView = useInView(ref, { once: true });
 
   return (
-    <div ref={ref} className="min-h-screen relative w-[500px] flex flex-col bg-[url('/template2/bg-phone-navy.png')] items-center bg-white text-2xl snap-start snap-always ">
+    <div ref={ref} className="min-h-screen relative md:w-[500px] flex flex-col bg-[url('/template2/bg-phone-navy.png')] items-center bg-white text-2xl snap-start snap-always ">
       <motion.div 
         className="w-64 h-72 p-3 rounded-t-full rounded-b-xl mt-6 mr-36  mb-4 z-10 bg-gradient-to-t from-slate-50 to-orange-200"
         initial={{ opacity: 0, y: 50 }}
@@ -469,7 +469,7 @@ const Groom = ({ formPreview, maleUrl }: { formPreview: FormPreview, maleUrl: st
       </div>
       <div className="">
 
-        <img className=" w-[500px] absolute top-0 left-0 object-contain " src="/template2/line2.png" alt="" />
+        <img className=" md:w-[500px] absolute top-0 left-0 object-contain " src="/template2/line2.png" alt="" />
       </div>
     </div>
   );
@@ -534,7 +534,7 @@ const CountDown: React.FC<{ formPreview: FormPreview }> = ({ formPreview })=> {
 
   return (
 
-    <div className="min-h-screen w-[500px] flex flex-col bg-[url('/template2/bg-phone-navy.png')] items-center justify-center  text-2xl snap-start snap-always">
+    <div className="min-h-screen md:w-[500px] flex flex-col bg-[url('/template2/bg-phone-navy.png')] items-center justify-center  text-2xl snap-start snap-always">
       <motion.div 
         ref={ref} className="div"
         initial={{ opacity: 0, y: 50 }}
@@ -587,8 +587,8 @@ const CountDown: React.FC<{ formPreview: FormPreview }> = ({ formPreview })=> {
         )}
       </motion.div>
 
-      <div className="w-[500px] relative">
-        <img className="min-h-screen w-[500px] absolute bottom-0 left-0 object-contain animate-pulse" src="/template1/15.png" alt="" />
+      <div className="md:w-[500px] relative">
+        <img className="min-h-screen md:w-[500px] absolute bottom-0 left-0 object-contain animate-pulse" src="/template1/15.png" alt="" />
       </div>
     </div>
   );
@@ -600,8 +600,8 @@ const Place = ({ formPreview }: { formPreview: FormPreview }) =>  {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   return (
-    <div className="min-h-screen relative w-[500px] text-2xl bg-[url('/template2/bg-phone-navy.png')] flex flex-col justify-center gap-10 items-center">
-      <div className="relative w-[500px] h-[95%]">
+    <div className="min-h-screen relative md:w-[500px] text-2xl bg-[url('/template2/bg-phone-navy.png')] flex flex-col justify-center gap-10 items-center">
+      <div className="relative md:w-[500px] h-[95%]">
         <img src="/template2/bg-akad.jpeg" className="w-full h-full object-cover" alt="" />
         <div className="absolute top-0 left-0 w-full h-full bg-orange-100 opacity-30"></div>
         <div className="absolute top-1/2 transform -translate-y-1/2 w-full flex justify-center">
@@ -659,8 +659,8 @@ const Place2 = ({ formPreview }: { formPreview: FormPreview }) =>  {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   return (
-    <div className="min-h-screen relative w-[500px] text-2xl bg-[url('/template2/bg-phone-navy.png')] flex flex-col justify-center gap-10 items-center">
-      <div className="relative w-[500px] h-[95%]">
+    <div className="min-h-screen relative md:w-[500px] text-2xl bg-[url('/template2/bg-phone-navy.png')] flex flex-col justify-center gap-10 items-center">
+      <div className="relative md:w-[500px] h-[95%]">
         <img src="/template2/bg-resepsi.jpeg" className="w-full h-full object-cover" alt="" />
         <div className="absolute top-0 left-0 w-full h-full bg-orange-100 opacity-30"></div>
         <div className="absolute top-1/2 transform -translate-y-1/2 w-full flex justify-center">
@@ -722,7 +722,7 @@ const Story = ({ formPreview }: { formPreview: FormPreview }) => {
   const typeToFind = formPreview.storyType
   const storyData = StoryList.find(item => item.type === typeToFind);
   return(
-    <div className="min-h-screen relative w-[500px] text-2xl  flex flex-col justify-start items-center bg-[url('/template2/bg-phone-navy.png')]">
+    <div className="min-h-screen relative md:w-[500px] text-2xl  flex flex-col justify-start items-center bg-[url('/template2/bg-phone-navy.png')]">
       <motion.div 
       className="px-10"
       initial={{ opacity: 0, y: 50 }}
@@ -804,7 +804,7 @@ const Album = ({ formPreview }: { formPreview: FormPreview }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   return(
-    <div className="min-h-screen relative w-[500px] text-2xl  flex flex-col justify-start items-center bg-[url('/template2/bg-phone-navy.png')]">
+    <div className="min-h-screen relative md:w-[500px] text-2xl  flex flex-col justify-start items-center bg-[url('/template2/bg-phone-navy.png')]">
 
       <div className="my-4">
         <h2 className={`${bilbo.className} text-6xl text-[#D9C7A4]`}>Album</h2>
@@ -874,7 +874,7 @@ const Gift = ({ formPreview }: { formPreview: FormPreview }) => {
   };
 
   return(
-    <div className="min-h-screen relative w-[500px] text-2xl bg-[url('/template2/bg-phone-navy.png')] md:py-10 flex flex-col justify-center items-center">
+    <div className="min-h-screen relative md:w-[500px] text-2xl bg-[url('/template2/bg-phone-navy.png')] md:py-10 flex flex-col justify-center items-center">
       <motion.div 
         className="px-16 mb-5"
         initial={{ opacity: 0, y: 50 }}
@@ -939,7 +939,7 @@ const Closing = ({ formPreview }: { formPreview: FormPreview }) =>  {
     setMessage(""); // Reset text field setelah pengiriman
   };
   return(
-    <div className="min-h-screen relative w-[500px] text-2xl py-5 bg-[url('/template2/bg-phone-navy.png')] flex flex-col justify-start items-center">
+    <div className="min-h-screen relative md:w-[500px] text-2xl py-5 bg-[url('/template2/bg-phone-navy.png')] flex flex-col justify-start items-center">
       
       <div className="z-20">
         <h2 className={`${bilbo.className} text-4xl mb-5 text-[#D9C7A4] `}>Konfirmasi Kehadiran</h2>
