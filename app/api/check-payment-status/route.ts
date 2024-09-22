@@ -1,12 +1,14 @@
-// Example API route for checking payment status
-import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '@/lib/prisma';
+import { NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.query;
+const prisma = new PrismaClient();
 
-  if (typeof id !== 'string') {
-    return res.status(400).json({ message: 'Invalid id' });
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get('id');
+
+  if (!id) {
+    return NextResponse.json({ error: 'Wedding ID is required' }, { status: 400 });
   }
 
   try {
@@ -15,12 +17,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     if (!wedding) {
-      return res.status(404).json({ message: 'Wedding not found' });
+      return NextResponse.json({ error: 'Wedding not found' }, { status: 404 });
     }
 
-    res.status(200).json({ watermark: wedding.watermark });
+    return NextResponse.json({ watermark: wedding.watermark }, { status: 200 });
   } catch (error) {
-    console.error('Error fetching payment status:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
