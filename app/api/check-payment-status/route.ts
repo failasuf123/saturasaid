@@ -10,6 +10,7 @@ export async function GET(req: Request) {
   if (!id) {
     return NextResponse.json({ error: 'Wedding ID is required' }, { status: 400 });
   }
+  //s
 
   try {
     const wedding = await prisma.wedding.findUnique({
