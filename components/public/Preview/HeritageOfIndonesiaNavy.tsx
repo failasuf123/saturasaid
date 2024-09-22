@@ -331,7 +331,7 @@ const Greeting = ({ formPreview }: { formPreview: FormPreview }) => {
         </div>
 
         <div className="mt-2 z-10">
-          <p className={`text-4xl text-[#D9C7A4] border-sm underline decoration-gray-600 ${playball.className}`}>{formPreview?.nicknameMale} & {formPreview?.nicknameMale}</p>
+          <p className={`text-4xl text-[#D9C7A4] border-sm underline decoration-gray-600 ${playball.className}`}>{formPreview?.nicknameMale} & {formPreview?.nicknameFemale}</p>
         </div>
 
         <div className="mt-3 z-10 px-5 py-2 bg-white rounded-full animate-bounce">

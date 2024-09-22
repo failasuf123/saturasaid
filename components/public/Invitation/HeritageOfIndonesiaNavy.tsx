@@ -15,6 +15,13 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { IntroductionList } from '@/shared/Choose/IntroductionList';
+import { GreetingList } from '@/shared/Choose/GreetingList';
+import { HookMiddleList } from '@/shared/Choose/HookMiddleList';
+import { StoryList } from '@/shared/Choose/StoryList';
+import { ClosingList } from '@/shared/Choose/ClosingList';
+import { MusicList } from '@/shared/Choose/MusicList';
+
 
 
 interface HeritageOfIndonesiaNavyProps {
@@ -25,6 +32,8 @@ interface HeritageOfIndonesiaNavyProps {
   album: string[];
   name: string;
 }
+
+
 
 const HeritageOfIndonesiaNavy: React.FC<HeritageOfIndonesiaNavyProps> = ({ currentUser, cover, male, female, album, name }) => {
   if (!currentUser) {
@@ -92,16 +101,16 @@ const HeritageOfIndonesiaNavy: React.FC<HeritageOfIndonesiaNavyProps> = ({ curre
       </div>
       <div className="flex w-full flex-grow items-center justify-center ">
         <div className="w-full max-w-[1740px] mx-auto flex flex-col items-center snap-y snap-mandatory">
-          <Cover currentUser={currentUser} showBtn={!isInvitationOpened} name={name} onOpenInvitation={handleOpenInvitation} />
-          <Introduction currentUser={currentUser} isVisible={isIntroductionVisible} />
+          <Cover currentUser={currentUser} showBtn={!isInvitationOpened} name={name} cover={cover || ''} onOpenInvitation={handleOpenInvitation} />
+          <Introduction currentUser={currentUser} isVisible={isIntroductionVisible} album={album} />
           <Greeting currentUser={currentUser} />
-          <Bride currentUser={currentUser} />
-          <Groom currentUser={currentUser}/>
+          <Bride currentUser={currentUser} female={female||"" }/>
+          <Groom currentUser={currentUser} male={male||""}/>
           <CountDown currentUser={currentUser} />
           <Place currentUser={currentUser} />
           <Place2 currentUser={currentUser} />
           <Story currentUser={currentUser} />
-          <Album currentUser={currentUser} />
+          <Album currentUser={currentUser} album={album} />
           <Gift currentUser={currentUser}/>
           <Closing currentUser={currentUser}  name={name}/>
 
@@ -116,10 +125,11 @@ interface CoverProps {
   currentUser: BridalCouple | null;
   showBtn: boolean;
   name: string;
+  cover: string,
   onOpenInvitation: () => void;
 }
 
-function Cover({ currentUser, showBtn, name, onOpenInvitation }: CoverProps) {
+function Cover({ currentUser, showBtn, cover, name, onOpenInvitation }: CoverProps) {
   return (
     <div className="flex justify-center items-center relative min-h-screen w-[500px] flex-col bg-[url('/template2/bg-phone-navy.png')] justify-center pb-10 text-2xl overflow-hidden">      <div className="flex flex-col items-center">
         <div className="mt-5 z-10">
@@ -131,10 +141,9 @@ function Cover({ currentUser, showBtn, name, onOpenInvitation }: CoverProps) {
         </div>
       </div>
 
-      
       <motion.img
         className="w-[300px] object-cover top-1/2 mt-5"
-        src="/template2/circular1.png"
+        src="/template2/circular1.png" // curent?.
         alt=""
         animate={{ rotate: 360 }}
         transition={{
@@ -144,9 +153,10 @@ function Cover({ currentUser, showBtn, name, onOpenInvitation }: CoverProps) {
         }}
       />
       <img
-        className="absolute w-[180px] h-[270px] border-4 border-[#D9C7A4] rounded-t-full rounded-b-2xl object-cover top-1/2 left-1/2 transform -translate-x-[50%] -translate-y-[50%] z-20" // Menggunakan translate-x dan translate-y untuk memusatkan gambar
-        src="/pasangan/1/4.jpeg" // Ganti dengan path gambar pengantin
+        className="absolute w-[180px] h-[270px] object-contain border-4 border-[#D9C7A4] rounded-t-full rounded-b-2xl object-cover top-1/2 left-1/2 transform -translate-x-[50%] -translate-y-[50%] z-20" // Menggunakan translate-x dan translate-y untuk memusatkan gambar
+        src={cover ? cover:"/pasangan/1/4.jpeg"} // Ganti dengan path gambar pengantin
         alt="Pengantin"
+        
       />
 
       <div className="flex flex-col items-center ">
@@ -196,13 +206,15 @@ function Cover({ currentUser, showBtn, name, onOpenInvitation }: CoverProps) {
 interface IntroductionProps {
   currentUser: BridalCouple | null;
   isVisible: boolean;
+  album: string[];
 }
-function Introduction({ currentUser, isVisible }: IntroductionProps) {
-  const images = [
+function Introduction({ currentUser, isVisible, album }: IntroductionProps) {
+  const typeToFind = currentUser?.introductionType;
+  const introductionData = IntroductionList.find(item => item.type === typeToFind);
+  const images = album ? album : [
     "/pasangan/1/4.jpeg",
     "/pasangan/1/3.jpeg",
     "/pasangan/1/2.jpeg",
-    // Jika ada gambar tambahan, tambahkan di sini
   ];
 
   // Fungsi untuk menduplikasi gambar hingga total menjadi 6 gambar
@@ -285,15 +297,21 @@ function Introduction({ currentUser, isVisible }: IntroductionProps) {
 
 
         <h2 className={`text-[#D9C7A4] text-2xl font-bold ${bilbo.className}`}>We Found Love !</h2>
-        <p className={`text-gray-100 text-sm mx-10 mt-3 text-center`}> "Dan di antara tanda-tanda kekuasaan-Nya diciptakan-Nya untukmu pasangan hidup dari jenismu sendiri supaya kamu dapat ketenangan hati dan dijadikannya kasih sayang di antara kamu. Sesungguhnya yang demikian menjadi tanda-tanda kebesaran-Nya bagi orang-orang yang berpikir."</p>
-        <p className={`text-gray-100 text-xs mx-3 my-3 text-center`}>- Q.S. Ar-Rum: 21 -</p>
+        <p className={`text-gray-100 text-sm mx-10 mt-3 text-center`}>"{introductionData?.isi}"</p>
+        <p className={`text-gray-100 text-xs mx-3 my-3 text-center`}>- {introductionData?.sumber} -</p>
       </motion.div>
     </div>
   );
 }
+
+
 const Greeting = ({ currentUser }: { currentUser: BridalCouple| null }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+  // const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  // const formattedDate = currentUser?.time.toLocaleDateString('id-ID', options);
+  const typeToFind = currentUser?.greetingType
+  const greetingData = GreetingList.find(item => item.type === typeToFind);
   return(
     <div  className="min-h-[500px] h-[700px] relative w-[500px] flex flex-col bg-[url('/template2/bg-phone-navy.png')] items-center justify-center bg-white text-2xl snap-start snap-always ">
       <motion.div 
@@ -308,22 +326,22 @@ const Greeting = ({ currentUser }: { currentUser: BridalCouple| null }) => {
         </div>
 
         <div className="mt-2 z-10">
-          <p className={`text-4xl text-[#D9C7A4] border-sm underline decoration-gray-600 ${playball.className}`}>{currentUser?.nicknameMale} & {currentUser?.nicknameMale}</p>
+          <p className={`text-4xl text-[#D9C7A4] border-sm underline decoration-gray-600 ${playball.className}`}>{currentUser?.nicknameMale} & {currentUser?.nicknameFemale}</p>
         </div>
 
         <div className="mt-3 z-10 px-5 py-2 bg-white rounded-full animate-bounce">
-          <p className={`text-[#D9C7A4] text-xl ${playball.className} animate-bounce`}>
-            Sabtu, 20 Juli 2024
-          </p>
-        </div>
+            {/* {formattedDate} */}
+            <p className={`text-[#D9C7A4] text-xl ${playball.className} animate-bounce`}>
+              {currentUser?.time ? 
+                new Date(currentUser.time).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) 
+                : 'Tanggal tidak tersedia'}
+            </p>
+          </div>
 
         <div>
           <p className={`text-[#D9C7A4] text-lg mx-10 mt-3  text-center  `}>
-          Assalamu’alaikum Wr. Wb.
-          Dengan memohon rahmat dan ridho Allah
-          Subhanahu Wa Ta’ala, InsyaaAllah kami akan menyelenggarakan acara pernikahan :
+           {greetingData?.isi}
           </p>
-
         </div>
       </motion.div>
       <div>
@@ -339,23 +357,23 @@ const Greeting = ({ currentUser }: { currentUser: BridalCouple| null }) => {
   )
 }
 
-const Bride = ({ currentUser }: { currentUser: BridalCouple| null }) =>  {
+const Bride = ({ currentUser, female }: { currentUser: BridalCouple| null, female: string }) =>  {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
   return (
     <div ref={ref} className="min-h-screen relative w-[500px] flex flex-col justify-between bg-[url('/template2/bg-phone-navy.png')] items-center bg-white text-2xl snap-start snap-always ">
       <motion.div 
-        className="w-64 h-72 p-3 rounded-t-full rounded-b-xl mt-6 ml-36  mb-4 z-10 bg-gradient-to-t from-slate-50 to-orange-200"
+        className="w-[220px] h-72 p-3 rounded-t-full rounded-b-xl mt-6 ml-36  mb-4 z-10 bg-gradient-to-t from-slate-50 to-orange-200"
         initial={{ opacity: 0, y: 50 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 4 }}
       >
-        <div className="overflow-hidden rounded-t-full rounded-b-2xl">
+        <div className="overflow-hidden rounded-t-full flex justify-center items-center rounded-b-2xl">
           <img 
-            src="/template1/pasangan/pasangan1_female.jpeg" 
+            src={female ? female:"/template1/pasangan/pasangan1_female.jpeg"} 
             alt="Pengantin Wanita" 
-            className="w-full h-full object-cover rounded-b-3xl"
+            className="w-[200px] h-[300px] object-cover rounded-b-3xl"
           />
         </div>
       </motion.div>
@@ -398,23 +416,23 @@ const Bride = ({ currentUser }: { currentUser: BridalCouple| null }) =>  {
 }
 
 
-const Groom = ({ currentUser }: { currentUser: BridalCouple| null }) =>  {
+const Groom = ({ currentUser, male }: { currentUser: BridalCouple| null, male:string }) =>  {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
   return (
     <div ref={ref} className="min-h-screen relative w-[500px] flex flex-col bg-[url('/template2/bg-phone-navy.png')] items-center bg-white text-2xl snap-start snap-always ">
       <motion.div 
-        className="w-64 h-72 p-3 rounded-t-full rounded-b-xl mt-6 mr-36  mb-4 z-10 bg-gradient-to-t from-slate-50 to-orange-200"
+        className="w-[220px] h-72 p-3 rounded-t-full rounded-b-xl mt-6 mr-36  mb-4 z-10 bg-gradient-to-t from-slate-50 to-orange-200"
         initial={{ opacity: 0, y: 50 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 4 }}
         >
-        <div className="overflow-hidden rounded-t-full rounded-b-2xl">
+        <div className="overflow-hidden flex justify-center  rounded-t-full rounded-b-2xl">
           <img 
-            src="/template1/pasangan/pasangan1_male.jpeg" 
+            src={male ? male:"/template1/pasangan/pasangan1_male.jpeg"} 
             alt="Pengantin Wanita" 
-            className="w-full h-full object-cover rounded-b-3xl "
+            className="w-[200px] h-[300px] object-cover rounded-b-3xl "
           />
         </div>
       </motion.div>
@@ -425,11 +443,11 @@ const Groom = ({ currentUser }: { currentUser: BridalCouple| null }) =>  {
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 4 }}
         >
-        <p className={`text-4xl font-bold text-[#D9C7A4] ${bilbo.className}`}>Romeo Widjaya Kusuma</p>
+        <p className={`text-4xl font-bold text-[#D9C7A4] ${bilbo.className}`}>{currentUser?.fullnameMale}</p>
         <p className={`text-sm text-[#D9C7A4] mt-8 md:mt-5 lg:mt-3`}>Putra dari </p>
         <div className="flex flex-col items-center px-3 py-2 bg-cyan-100 bg-opacity-10 md:bg-opacity-20 rounded">
-          <p className={`text-2xl font-bold text-[#D9C7A4]  ${bilbo.className}`}>Bapak ir.H.Joko Hadi Koesuma <hr /> </p>
-          <p className={`text-2xl font-bold text-[#D9C7A4]  ${bilbo.className}`}>Ibu Sri Rejeki </p>
+          <p className={`text-2xl font-bold text-[#D9C7A4]  ${bilbo.className}`}>Bapak {currentUser?.dadMale} <hr /> </p>
+          <p className={`text-2xl font-bold text-[#D9C7A4]  ${bilbo.className}`}>Ibu {currentUser?.momMale}</p>
         </div>
       </motion.div>
       <div>
@@ -508,6 +526,8 @@ const CountDown: React.FC<{ currentUser: BridalCouple | null }> = ({ currentUser
 
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+  const typeToFind = currentUser?.hookMiddleType
+  const hookData = HookMiddleList.find(item => item.type === typeToFind);
 
   return (
 
@@ -538,8 +558,7 @@ const CountDown: React.FC<{ currentUser: BridalCouple | null }> = ({ currentUser
           }}
       >
         <p className={`text-lg text-[#D9C7A4] text-center    `}>
-          Siang dan malam berganti begitu cepat, diantara saat saat mendebarkan yang belum pernah kami rasakan sebelum nya. 
-          kami nantikan kehadiran para keluarga dan sahabat, untuk menjadi saksi ikrar janji suci kami di hari yang bahagia :
+          {hookData?.isi}
         </p>
       </motion.div>
       <motion.div className="mt-5 flex flex-col items-center justify-center gap-2"
@@ -573,10 +592,18 @@ const CountDown: React.FC<{ currentUser: BridalCouple | null }> = ({ currentUser
 };
 
 
-
-const Place = ({ currentUser }: { currentUser: BridalCouple| null }) =>  {
+const Place = ({ currentUser }: { currentUser: BridalCouple | null }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+
+  // Menggunakan Date untuk memisahkan hari, tanggal, bulan, tahun, dan waktu
+  const eventDate = currentUser?.time ? new Date(currentUser.time) : null;
+  const dayName = eventDate ? eventDate.toLocaleDateString('id-ID', { weekday: 'long' }) : '';
+  const dayNumber = eventDate ? eventDate.getDate() : '';
+  const monthName = eventDate ? eventDate.toLocaleDateString('id-ID', { month: 'long' }) : '';
+  const year = eventDate ? eventDate.getFullYear() : '';
+  const time = eventDate ? eventDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '';
+
   return (
     <div className="min-h-screen relative w-[500px] text-2xl bg-[url('/template2/bg-phone-navy.png')] flex flex-col justify-center gap-10 items-center">
       <div className="relative w-[500px] h-[95%]">
@@ -599,7 +626,7 @@ const Place = ({ currentUser }: { currentUser: BridalCouple| null }) =>  {
         </div>
       </div>
 
-      <motion.div 
+      <motion.div
         ref={ref}
         className="absolute text-center flex flex-col items-center justify-center mt-10 gap-3 z-20"
         initial={{ opacity: 0, y: 50 }}
@@ -607,24 +634,25 @@ const Place = ({ currentUser }: { currentUser: BridalCouple| null }) =>  {
         transition={{ duration: 4 }}
       >
         <div className="z-10">
-          <p className={`text-gray-700 text-5xl ${playball.className}`}>Akad</p>
+          <p className={`text-gray-700 text-5xl ${playball.className}`}>{currentUser?.event}</p>
         </div>
 
         <div className="z-10 mt-4 gap-2 flex flex-col items-center ">
-          <p className="text-gray-700 text-4xl">Sabtu</p>
-          <p className="text-gray-700 text-8xl font-bold">20</p>
-          <p className="text-gray-700 text-3xl">Juli 2024</p>
-          <p className="text-gray-700 text-2xl mt-2">Pukul: 08.00 WIB</p>
-          <p className="text-gray-700 text-2xl ">||</p>
-          <p className="text-gray-700 text-2xl ">Bertempat di:</p>
+          <p className="text-gray-700 text-4xl">{dayName}</p>
+          <p className="text-gray-700 text-8xl font-bold">{dayNumber}</p>
+          <p className="text-gray-700 text-3xl">{monthName} {year}</p>
+          <p className="text-gray-700 text-2xl mt-2">Pukul: {time} WIB</p>
+          <p className="text-gray-700 text-2xl">||</p>
+          <p className="text-gray-700 text-2xl">Bertempat di:</p>
           <div className="mx-12 bg-white rounded-lg items-center py-1 px-4">
-            <p className="text-gray-800 text-lg mt-2">Kediaman Mempelai Wanita, Ajibarang wetan Rt 02 Rw 12</p>
+            <p className="text-gray-800 text-lg mt-2">{currentUser?.address}</p>
           </div>
         </div>
+        
         <div>
-          <a target="_blank" rel="noopener noreferrer" href="https://maps.google.com/maps?q=Ajibarang%20wetan%20Rt%2002%20Rw%2012&t=&z=13&ie=UTF8&iwloc">
+          <a target="_blank" rel="noopener noreferrer" href={currentUser?.gmap ? currentUser?.gmap:"https://maps.google.com/maps?q=Ajibarang%20wetan%20Rt%2002%20Rw%2012&t=&z=13&ie=UTF8&iwloc"}>
             <div className="bg-white opacity-80 hover:opacity-100 hover:scale-110 px-4 py-2 rounded-lg shadow-lg hover:shadow-2xl shadow-cyan-600 hover:shadow-cyan-700 cursor-pointer">
-                  <p className="text-sm text-gray-800 ">Buka Maps</p>
+              <p className="text-sm text-gray-800">Buka Maps</p>
             </div>
           </a>
         </div>
@@ -633,9 +661,19 @@ const Place = ({ currentUser }: { currentUser: BridalCouple| null }) =>  {
   );
 }
 
-const Place2 = ({ currentUser }: { currentUser: BridalCouple| null }) =>  {
+
+const Place2 = ({ currentUser }: { currentUser: BridalCouple | null }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+
+
+  const eventDate = currentUser?.time ? new Date(currentUser.time) : null;
+  const dayName = eventDate ? eventDate.toLocaleDateString('id-ID', { weekday: 'long' }) : '';
+  const dayNumber = eventDate ? eventDate.getDate() : '';
+  const monthName = eventDate ? eventDate.toLocaleDateString('id-ID', { month: 'long' }) : '';
+  const year = eventDate ? eventDate.getFullYear() : '';
+  const time = eventDate ? eventDate.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '';
+
   return (
     <div className="min-h-screen relative w-[500px] text-2xl bg-[url('/template2/bg-phone-navy.png')] flex flex-col justify-center gap-10 items-center">
       <div className="relative w-[500px] h-[95%]">
@@ -666,31 +704,33 @@ const Place2 = ({ currentUser }: { currentUser: BridalCouple| null }) =>  {
         transition={{ duration: 4 }}
       >
         <div className="z-10">
-          <p className={`text-white text-5xl ${playball.className}`}>Resepsi Pernikahan</p>
+          <p className={`text-white text-5xl ${playball.className}`}>{currentUser?.event2}</p>
         </div>
 
         <div className="z-10 mt-4 gap-2 flex flex-col items-center ">
-          <p className="text-white text-4xl">Minggu</p>
-          <p className="text-white text-8xl font-bold">21</p>
-          <p className="text-white text-3xl">Juli 2024</p>
-          <p className="text-white text-2xl mt-2">Pukul: 08.00 WIB</p>
-          <p className="text-white text-2xl ">||</p>
-          <p className="text-white text-2xl ">Bertempat di:</p>
+          <p className="text-white text-4xl">{dayName}</p>
+          <p className="text-white text-8xl font-bold">{dayNumber}</p>
+          <p className="text-white text-3xl">{monthName} {year}</p>
+          <p className="text-white text-2xl mt-2">Pukul: {time} WIB</p>
+          <p className="text-white text-2xl">||</p>
+          <p className="text-white text-2xl">Bertempat di:</p>
           <div className="mx-12 bg-white rounded-lg items-center py-1 px-4">
-            <p className="text-gray-800 text-lg mt-2">Kediaman Mempelai Wanita, Ajibarang wetan Rt 02 Rw 12</p>
+            <p className="text-gray-800 text-lg mt-2">{currentUser?.address2}</p>
           </div>
         </div>
+
         <div>
-          <a target="_blank" rel="noopener noreferrer" href="https://maps.google.com/maps?q=Ajibarang%20wetan%20Rt%2002%20Rw%2012&t=&z=13&ie=UTF8&iwloc">
+          <a target="_blank" rel="noopener noreferrer" href={currentUser?.gmap2 ? currentUser?.gmap2 : "https://maps.google.com/maps?q=Ajibarang%20wetan%20Rt%2002%20Rw%2012&t=&z=13&ie=UTF8&iwloc"}>
             <div className="bg-white opacity-80 hover:opacity-100 hover:scale-110 px-4 py-2 rounded-lg shadow-lg hover:shadow-2xl shadow-cyan-600 hover:shadow-cyan-700 cursor-pointer">
-                  <p className="text-sm text-gray-800 ">Buka Maps</p>
+              <p className="text-sm text-gray-800">Buka Maps</p>
             </div>
           </a>
         </div>
       </motion.div>
     </div>
   );
-}
+};
+
 
 
 const Story = ({ currentUser }: { currentUser: BridalCouple| null }) => {
@@ -776,72 +816,57 @@ const Story = ({ currentUser }: { currentUser: BridalCouple| null }) => {
   )
 }
 
-const Album = ({ currentUser }: { currentUser: BridalCouple| null }) => {
+const Album = ({ currentUser, album }: { currentUser: BridalCouple | null, album: string[] }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-  return(
-    <div className="min-h-screen relative w-[500px] text-2xl  flex flex-col justify-start items-center bg-[url('/template2/bg-phone-navy.png')]">
+  const images = album.length > 0 ? album : [
+    "/pasangan/1/4.jpeg",
+    "/pasangan/1/3.jpeg",
+    "/pasangan/1/2.jpeg",
+  ];
+
+  // Fungsi untuk menduplikasi gambar hingga total menjadi 6 gambar
+  const duplicateImages = (imgs: string[]) => {
+    const duplicatedImages = [...imgs];
+    while (duplicatedImages.length < 20) {
+      duplicatedImages.push(...imgs);
+    }
+    return duplicatedImages.slice(0, 6);
+  };
+
+  const finalImages = duplicateImages(images);
+
+  return (
+    <div className="min-h-screen relative w-[500px] text-2xl flex flex-col justify-start items-center bg-[url('/template2/bg-phone-navy.png')]">
 
       <div className="my-4">
-        <h2 className={`${bilbo.className} text-6xl text-[#D9C7A4]`}>Album</h2>
+        <h2 className="text-6xl text-[#D9C7A4]">Album</h2>
       </div>
-      
 
-    <div className="grid grid-cols-2 gap-4 px-3 py-1">
-        <div>
-            <motion.img        
+      <div className="grid grid-cols-2 gap-4 px-3 py-1">
+        {finalImages.map((src, index) => (
+          <div key={index}>
+            <motion.img
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay:0.4 }}
-              className=" rounded h-[270px] w-[180px] md:h-[320px] md:w-[213px]" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt=""/>
-        </div>
-        <div>
-            <motion.img        
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay:0.4 }}
-              className=" rounded h-[270px] w-[180px] md:h-[320px] md:w-[213px]" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt=""/>
-        </div>
-        <div>
-            <motion.img        
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay:0.4 }}
-              className=" rounded h-[270px] w-[180px] md:h-[320px] md:w-[213px]" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt=""/>
-        </div>
-        <div>
-            <motion.img        
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay:0.4 }}
-              className=" rounded h-[270px] w-[180px] md:h-[320px] md:w-[213px]" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt=""/>
-        </div>
-        <div>
-            <motion.img        
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay:0.4 }}
-              className=" rounded h-[270px] w-[180px] md:h-[320px] md:w-[213px]" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt=""/>
-        </div>
-        <div>
-            <motion.img        
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay:0.4 }}
-              className=" rounded h-[270px] w-[180px] md:h-[320px] md:w-[213px]" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt=""/>
-        </div>
-   
-    </div>
+              transition={{ duration: 1, delay: 0.4 }}
+              className="rounded h-[270px] w-[180px] md:h-[320px] md:w-[213px]"
+              src={src}
+              alt={`Album image ${index + 1}`}
+            />
+          </div>
+        ))}
+      </div>
 
     </div>
-  )
-}
+  );
+};
 
 const Gift = ({ currentUser }: { currentUser: BridalCouple| null }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-  const handleCopy = () => {
-    const accountNumber = "18928199201";
+  const handleCopy = (number) => {
+    const accountNumber = number;
     navigator.clipboard.writeText(accountNumber).then(() => {
       toast('Nomor Rekening Berhasil Disalin!', {
         position: "top-right",
@@ -877,12 +902,12 @@ const Gift = ({ currentUser }: { currentUser: BridalCouple| null }) => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay:0.4 }}
         >
-          <h2 className=" absolute font-bold top-[15px] right-[25px] ">Mandiri</h2>
-          <h2 className=" absolute text-lg bottom-[60px] left-[25px]">Romoe Mariona</h2>
-          <h2 className=" absolute font-bold bottom-[25px] left-[25px] ">18928199201</h2>
+          <h2 className=" absolute font-bold top-[15px] right-[25px] ">{currentUser?.accountBank1}</h2>
+          <h2 className=" absolute text-lg bottom-[60px] left-[25px]">{currentUser?.accountName1}</h2>
+          <h2 className=" absolute font-bold bottom-[25px] left-[25px] ">{currentUser?.accountNumber1}</h2>
           <button
-          onClick={handleCopy}
-          className="absolute bottom-[25px] right-[25px] bg-gray-300 scale-75 text-white p-3 rounded-full shadow-md hover:bg-gray-400 transition"
+            onClick={() => handleCopy(currentUser?.accountNumber1)}
+            className="absolute bottom-[25px] right-[25px] bg-gray-300 scale-75 text-white p-3 rounded-full shadow-md hover:bg-gray-400 transition"
         >
           <FaCopy />
         </button>
@@ -894,13 +919,13 @@ const Gift = ({ currentUser }: { currentUser: BridalCouple| null }) => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay:0.4 }}
         >
-          <h2 className=" absolute font-bold top-[15px] right-[25px] ">BNI</h2>
-          <h2 className=" absolute text-lg bottom-[60px] left-[25px]">Julieta Azizah</h2>
-          <h2 className=" absolute font-bold bottom-[25px] left-[25px] ">2106750364</h2>
-          <button
-          onClick={handleCopy}
-          className="absolute bottom-[25px] right-[25px] bg-gray-300 scale-75 text-white p-3 rounded-full shadow-md hover:bg-gray-400 transition"
-        >
+          <h2 className=" absolute font-bold top-[15px] right-[25px] ">{currentUser?.accountBank2}</h2>
+          <h2 className=" absolute text-lg bottom-[60px] left-[25px]">{currentUser?.accountName2}</h2>
+          <h2 className=" absolute font-bold bottom-[25px] left-[25px] ">{currentUser?.accountNumber2}</h2>
+          <button 
+            onClick={() => handleCopy(currentUser?.accountNumber2)}
+            className="absolute bottom-[25px] right-[25px] bg-gray-300 scale-75 text-white p-3 rounded-full shadow-md hover:bg-gray-400 transition"
+          >
           <FaCopy />
         </button>
       </motion.div>
@@ -908,6 +933,7 @@ const Gift = ({ currentUser }: { currentUser: BridalCouple| null }) => {
     </div>
   );
 }
+
 interface Expression {
   name: string;
   expression: string;

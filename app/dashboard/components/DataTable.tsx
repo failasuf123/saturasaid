@@ -47,13 +47,6 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { Label } from "@/components/ui/label"
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -370,7 +363,7 @@ export const DataTableDemo: React.FC<DataTableDemoProps> = ({ id }) => {
 
   const onSubmit: SubmitHandler<GuestSchema> = async (data) => {
     const encodedName = encodeURIComponent(data.name); // Encode the name
-    const url = `localhost:2000/${data.weddingId}/${encodedName}`; // Use the encoded name in the URL
+    const url = `localhost:3000/${data.weddingId}/${encodedName}`; // Use the encoded name in the URL
     data.url = url; 
     toast('⏱️ Membuat Undangan', {
       position: "bottom-right",autoClose: 2000,hideProgressBar: true,closeOnClick: true, 

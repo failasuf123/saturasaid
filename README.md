@@ -7,9 +7,10 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 follow all of instruction from this site!
 
 ### 2. Shadcn UI setup
-1. npx shadcn-ui@latest init
+1. npm install shadcn-ui
+2. npx shadcn-ui@latest init
 - choose menu : New York, Slate
-2. npx shadcn-ui@latest add
+3. npx shadcn-ui@latest add
 - then press "A" and than "Enter"
 
 ### 3. Shadcn UI Theme

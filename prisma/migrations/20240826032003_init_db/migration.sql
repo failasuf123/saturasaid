@@ -97,6 +97,18 @@ CREATE TABLE "Expression" (
     CONSTRAINT "Expression_pkey" PRIMARY KEY ("expressionId")
 );
 
+-- CreateTable
+CREATE TABLE "Payment" (
+    "paymentId" TEXT NOT NULL,
+    "firstName" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "phoneNumber" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL,
+    "weddingId" TEXT NOT NULL,
+
+    CONSTRAINT "Payment_pkey" PRIMARY KEY ("paymentId")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_clerkid_key" ON "User"("clerkid");
 
@@ -114,3 +126,6 @@ ALTER TABLE "Confirmation" ADD CONSTRAINT "Confirmation_weddingId_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "Expression" ADD CONSTRAINT "Expression_weddingId_fkey" FOREIGN KEY ("weddingId") REFERENCES "Wedding"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Payment" ADD CONSTRAINT "Payment_weddingId_fkey" FOREIGN KEY ("weddingId") REFERENCES "Wedding"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

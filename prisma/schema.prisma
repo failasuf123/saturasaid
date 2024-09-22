@@ -32,8 +32,6 @@ model Wedding {
   dadFemale         String
   momFemale         String
 
-  // mainEventTime     DateTime
-
   accountName1      String?
   accountBank1      String?
   accountNumber1    String?
@@ -52,15 +50,6 @@ model Wedding {
   time2             DateTime?
   isEvent2          Boolean @default(true)
 
-  // event1            String
-  // address1          String
-  // gmap1             String
-  // time1             DateTime
-  // event2            String?
-  // address2          String?
-  // gmap2             String?
-  // time2             DateTime?
-
   introductionType  Int
   greetingType      Int
   hookMiddleType    Int
@@ -76,6 +65,8 @@ model Wedding {
   Confirmation Confirmation[]
 
   Expression Expression[]
+
+  Payment Payment[]
 }
 
 model Image {
@@ -119,4 +110,15 @@ model Expression {
   weddingId  String
   wedding    Wedding  @relation(fields: [weddingId], references: [id])
 }
+
+model Payment{
+  paymentId String @id
+  firstName String
+  email String
+  phoneNumber String
+  amount Int
+  weddingId  String
+  wedding    Wedding  @relation(fields: [weddingId], references: [id])
+}
+
 
